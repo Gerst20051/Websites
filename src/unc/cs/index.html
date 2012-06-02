@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>Andrew Gerst '15</title>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<link href="favicon.ico" rel="icon" type="image/x-icon">
+<style>
+body{background:#000 url(bg.png) no-repeat fixed center}
+.corner{filter:alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=0)";height:200px;opacity:0;-khtml-opacity:0;-moz-opacity:0;position:absolute;width:200px}
+#tl{background:rgb(255,88,88);border-radius-bottom-right:175px;-moz-border-radius-bottomright:175px;-webkit-border-bottom-right-radius:175px;left:0;top:0}
+#tr{background:rgb(120,127,255);border-radius-bottom-left:175px;-moz-border-radius-bottomleft:175px;-webkit-border-bottom-left-radius:175px;right:0;top:0}
+#bl{background:rgb(104,248,104);border-radius-top-right:175px;-moz-border-radius-topright:175px;-webkit-border-top-right-radius:175px;bottom:0;left:0}
+#br{background:rgb(255,181,95);border-radius-top-left:200px;-moz-border-radius-topleft:200px;-webkit-border-top-left-radius:200px;bottom:0;right:0}
+</style>
+</head>
+<body>
+<div id="tl" class="corner"></div><div id="tr" class="corner"></div>
+<div id="bl" class="corner"></div><div id="br" class="corner"></div>
+<script>
+$(".corner").hover(function(){
+    $(this).dequeue().animate({"opacity":1},700);
+},function(){
+    $(this).dequeue().animate({"opacity":0},1200);
+});
+</script>
+</body>
+</html>

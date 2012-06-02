@@ -1,0 +1,7 @@
+http://www.unc.edu/usr-bin/gerst/cgiprogram
+
+#!/afs/isis/pkg/perl/bin/perl
+#!/afs/isis/pkg/php/bin/php
+
+chmod u+x pgmname
+

@@ -1,0 +1,75 @@
+AFS Commands:
+cell: classroom.cs.unc.edu
+
+classroom(1)% fs la public_html
+Access list for public_html is
+Normal rights:
+  system:administrators rlidwka
+  system:anyuser l
+  gerst rlidwka
+
+classroom(2)% fs sa public_html cs-machines rl
+
+classroom(3)% fs sa public_html wwwx-server rl
+
+classroom(4)% fs ls pub
+public/      public_html/ 
+
+classroom(5)% fs la public_html/
+Access list for public_html/ is
+Normal rights:
+  wwwx-server rl
+  cs-machines rl
+  system:administrators rlidwka
+  system:anyuser l
+  gerst rlidwka
+  
+classroom(6)% fs help
+fs: Commands are:
+apropos         search by help text
+checkservers    check local cell's servers
+checkvolumes    check volumeID/name mappings
+cleanacl        clean up access control list
+copyacl         copy access control list
+diskfree        show server disk space usage
+examine         display file/volume status
+exportafs       enable/disable translators to AFS
+flush           flush file from cache
+flushmount      flush mount symlink from cache
+flushvolume     flush all data in volume
+getcacheparms   get cache usage info
+getcalleraccess list callers access
+getcellstatus   get cell status
+getclientaddrs  get client network interface addresses
+getcrypt        get cache manager encryption flag
+getfid          get fid for file(s)
+getserverprefs  get server ranks
+help            get help on commands
+listacl         list access control list
+listaliases     list configured cell aliases
+listcells       list configured cells
+listquota       list volume quota
+lsmount         list mount point
+messages        control Cache Manager messages
+mkmount         make mount point
+newalias        configure new cell alias
+newcell         configure new cell
+quota           show volume quota usage
+rmmount         remove mount point
+rxstatpeer      Manage per peer RX statistics
+rxstatproc      Manage per process RX statistics
+setacl          set access control list
+setcachesize    set cache size
+setcbaddr       configure callback connection address
+setcell         set cell status
+setclientaddrs  set client network interface addresses
+setcrypt        set cache manager encryption flag
+setquota        set volume quota
+setserverprefs  set server ranks
+setvol          set volume status
+storebehind     store to server after file close
+sysname         get/set sysname (i.e. @sys) value
+uuid            manage the UUID for the cache manager
+whereis         list file's location
+whichcell       list file's cell
+wscell          list workstation's cell
