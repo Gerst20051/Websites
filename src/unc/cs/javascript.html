@@ -15,6 +15,15 @@ margin-top:30px;
 word-break:normal;
 }
 
+pre > div .syntaxhighlighter {
+background-color:transparent !important;
+}
+
+pre > div .syntaxhighlighter .line.alt1,
+pre > div .syntaxhighlighter .line.alt2 {
+background-color:transparent !important;
+}
+
 code {
 background-color:transparent;
 border:0;
@@ -58,6 +67,31 @@ display:none;
 }
 
 @media print {
+pre {
+page-break-inside:auto;
+}
+
+@page {
+margin:1.0cm;
+}
+
+p,
+h2,
+h3 {
+orphans:3;
+widows:3;
+}
+
+h2,
+h3 {
+page-break-after:avoid;
+page-break-before:avoid;
+}
+
+a {
+color:#0088cc !important;
+}
+
 .hideforprint {
 display:none;
 }
@@ -2321,8 +2355,20 @@ Answers:
 1. 10
 2. 1
 
-Here, of course, the browser will alert "1". So what's going on here? While it might seem strange, dangerous, and confusing, this is actually a powerful and expressive feature of the language. I don't know if there is a standard name for this specific behavior, but I've come to like the term "hoisting"
+Here, of course, the browser will alert "1". So what's going on here? While it might seem strange, dangerous, and confusing, this is actually a powerful and expressive feature of the language. I don't know if there is a standard name for this specific behavior, but I've come to like the term "hoisting".
 
+It looks like this.
+<pre class="brush:js">
+var a;
+function b(){
+	var a = function(){};
+	a = 10;
+	return;
+}
+a = 1;
+b();
+alert(a);
+</pre>
 3. undefined
 4. 4
 5. 1
