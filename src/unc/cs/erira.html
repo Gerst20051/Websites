@@ -1,0 +1,30 @@
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<title>Dr. Reichart's ERIRA Ding</title>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<style>
+body{background-color:#0f0}
+</style>
+</head>
+<body>
+<h1>ERIRA 2012</h1>
+<h2>Dr. Reichart's Ding</h2>
+<script>
+$(document).ready(function(){
+	var audioElement=document.createElement('audio');
+	audioElement.setAttribute('src','http://www.ilovewavs.com/Events/WindowsSounds/WindowsXP/Windows%20XP%20Ding.wav');
+	audioElement.load()
+	audioElement.addEventListener("load",function(){
+		audioElement.play();
+	},true);
+	setInterval(function(){audioElement.play()},1000);
+});
+
+(function(){
+	window._gaq=[['_setAccount','UA-35801288-1'],['_trackPageview']];
+	var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;
+	ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';
+	var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);
+})();
+</script>
+</body>
+</html>
