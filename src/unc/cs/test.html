@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+</head>
+<body>
+<div>
+Test Scripts
+</div>
+<script>
+$(document).ready(undefined);
+$(document).ready(function(){alert("hey")});
+
+function bind(fnThis, fn){
+    var args = Array.prototype.slice.call(arguments, 2);
+    return function(){
+        if (0 < args.length) arguments = args;
+        return fn.apply(fnThis, arguments);
+    };
+}
+
+var scope = "Global Scope";
+var myobject = {
+    scope: "Local Scope",
+    mymethod: function(){
+        console.log(this);
+        alert(this.scope);
+    }
+};
+alert('noo');
+$(document).ready(myobject.mymethod());
+</script>
+</body>
+</html>

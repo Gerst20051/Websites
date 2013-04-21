@@ -27,6 +27,8 @@ background-color:transparent !important;
 code {
 background-color:transparent;
 border:0;
+white-space:pre-wrap;
+word-wrap:break-word;
 }
 
 a[name] {
@@ -35,6 +37,11 @@ cursor:default;
 
 a[name]:hover {
 text-decoration:none;
+}
+
+.link {
+color:#0088cc;
+cursor:pointer;
 }
 
 #footer {
@@ -67,40 +74,70 @@ display:none;
 }
 
 @media print {
-pre {
-page-break-inside:auto;
-}
+	pre {
+	page-break-inside:auto;
+	}
 
-@page {
-margin:1.0cm;
-}
+	@page {
+	margin:1.0cm;
+	}
 
-p,
-h2,
-h3 {
-orphans:3;
-widows:3;
-}
+	p,
+	h2,
+	h3 {
+	orphans:3;
+	widows:3;
+	}
 
-h2,
-h3 {
-page-break-after:avoid;
-page-break-before:avoid;
-}
+	h2,
+	h3 {
+	page-break-after:avoid;
+	page-break-before:avoid;
+	}
 
-a {
-color:#0088cc !important;
-}
+	a,
+	.link {
+	color:#0088cc !important;
+	}
 
-.hideforprint {
-display:none;
-}
+	.hideforprint {
+	display:none;
+	}
 
-.showforprint {
-display:block;
-}
+	.showforprint {
+	display:block;
+	}
 }
 </style>
+<script>
+var addLink = (function(){
+	window.links = [];
+	return function(text, callback){
+		document.write('<div class="link" onclick="window.links['+window.links.length+']();">'+text+'</div>');
+		window.links.push(callback);
+	}
+})();
+
+function printData(){
+	var name, obj;
+	if (!arguments.length) {
+		return false;
+	} else if (1 == arguments.length) {
+		name = arguments[0].constructor.name;
+		obj = arguments[0];
+	} else if (2 == arguments.length) {
+		name = arguments[0];
+		obj = arguments[1];
+	}
+	document.writeln(name + " -> " + print_r(obj,true).trim() + "\n");
+}
+
+if (!String.prototype.trim) {
+	String.prototype.trim = function(){
+		return this.replace(/^\s+|\s+$/g,'');
+	};
+}
+</script>
 </head>
 <body>
 <div class="container">
@@ -108,9 +145,9 @@ display:block;
 <div class="span12">
 <h1>JavaScript Mastery</h1>
 <h4>By: Andrew Gerst</h4>
-<a href="http://about.me/agerst">http://about.me/agerst</a><br/>
-<a class="hideforprint" href="http://cs.unc.edu/~gerst/JavaScript%20Mastery.pdf">JavaScript Mastery (PDF)</a>
-<a class="showforprint" href="http://cs.unc.edu/~gerst/javascript.html">JavaScript Mastery (Source)</a>
+<a href="http://about.me/agerst" target="_blank">http://about.me/agerst</a><br/>
+<a class="hideforprint" href="http://cs.unc.edu/~gerst/JavaScript%20Mastery.pdf" target="_blank">JavaScript Mastery (PDF)</a>
+<a class="showforprint" href="http://cs.unc.edu/~gerst/javascript.html" target="_blank">JavaScript Mastery (Source)</a>
 </div>
 </div>
 <div class="row">
@@ -177,7 +214,7 @@ JavaScript uses syntax influenced by that of C. JavaScript copies many names and
 Ten days in May 1995 "Mocha"
 September 1995: "LiveScript"
 December 1995: "JavaScript"
-1996-1997: ECMA-262 Ed. 1, aka ES1
+1996-1997: <a href="http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262,%201st%20edition,%20June%201997.pdf">ECMA-262 Ed. 1</a>, aka ES1
 1999: ES3: modern JS baseline
 2005: the Ajax revolution
 2008: ES4 RIP, Harmony founded in July
@@ -221,7 +258,7 @@ ECMAScript describes a general-purpose programming language, and does not say an
 
 A few other pieces of software use the language described in the ECMAScript document. Most importantly, the ActionScript language used by Flash is based on ECMAScript (though it does not precisely follow the standard). Flash is a system for adding things that move and make lots of noise to web-pages. Knowing JavaScript won't hurt if you ever find yourself learning to build Flash movies.
 
-There are five editions of ECMA-262 published. Work on a future edition, codenamed "Harmony", is in progress.
+There are five editions of <a href="http://www.ecma-international.org/publications/standards/Ecma-262-arch.htm">ECMA-262</a> published. <a href="http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262,%201st%20edition,%20June%201997.pdf">ECMAScript Edition 1</a> was based on several originating technologies, the most well known being JavaScript™ (Netscape Communications) and JScript™ (Microsoft Corporation). The development of this Standard was started in November 1996. The ECMA Standard was adopted by the ECMA General Assembly of June 1997. Please note that for ECMAScript Edition 4 the Ecma standard number "ECMA-262 Edition 4" was reserved but not used in the Ecma publication process. Therefore "ECMA-262 Edition 4" as an Ecma International publication does not exist. Work on a future edition, codenamed "Harmony", is in progress.
 </pre>
 </div>
 </div>
@@ -267,6 +304,68 @@ document.write("Hello World!");
 document.writeln("Hello World!");
 document.body.innerHTML = "Hello World!";
 document.body.appendChild(document.createTextNode("Hello World!"));
+document.documentElement.lastChild.appendChild(document.createTextNode("Hello World!"));
+</pre>
+<pre>
+<h3>alert</h3>
+An alert box is often used if you want to make sure information comes through to the user. When an alert box pops up, the user will have to click "OK" to proceed.
+
+The alert dialog should be used for messages which do not require any response on the part of the user, other than the acknowledgement of the message. Dialog boxes are modal windows - they prevent the user from accessing the rest of the program's interface until the dialog box is closed. For this reason, you should not overuse any function that creates a dialog box (or modal window).
+
+alert() is a method of the window object that cannot interpret HTML tags.
+
+alert() must output a string, so it must first convert the value to string - it is very important if you want to check what value you have at some point and you picked alert() to fulfill that task. It also stops the execution of the script (this may be useful sometimes).
+
+- blocks the entire browser and javascript thread
+- only prints strings
+- requires user interaction to continue (this means you can't automate browser usage)
+- blocked by common popup blockers
+- doesn't work in non-browser environments like node.js (however console.log does work in node.js)
+<pre class="brush:html">
+alert(
+	'This is an alert with basic formatting\n\n'
+	+ '\t• list item 1\n'
+	+ '\t• list item 2\n'
+	+ '\t• list item 3\n\n'
+	+ '▬▬▬▬▬▬▬▬▬ஜ۩۞۩ஜ▬▬▬▬▬▬▬▬▬\n\n'
+	+ 'Simple table\n\n'
+	+ 'Char\t| Result\n'
+	+ '\\n\t| line break\n'
+	+ '\\t\t| tab space'
+);
+</pre>
+<script>
+addLink("Click here to see an alert with basic formatting", function(){
+	alert(
+	'This is an alert with basic formatting\n\n'
+	+ '\t• list item 1\n'
+	+ '\t• list item 2\n'
+	+ '\t• list item 3\n\n'
+	+ '▬▬▬▬▬▬▬▬▬ஜ۩۞۩ஜ▬▬▬▬▬▬▬▬▬\n\n'
+	+ 'Simple table\n\n'
+	+ 'Char\t| Result\n'
+	+ '\\n\t| line break\n'
+	+ '\\t\t| tab space'
+	);
+});
+</script>
+
+<h3>document.write</h3>
+The document.write methods outputs a string directly into page.
+
+This is one of most ancient methods of appending to a document. It is very rarely used in modern web applications, but still it has it's special place.
+
+When document is loading, a script may document.write(text) into the document. The text will be rendered same way as if it were in HTML.
+
+There are no restrictions on the contents of document.write. It doesn't have to output valid tags, close them or anything.
+
+It is very fast, because the browser doesn't have to modify an existing DOM structure.
+
+Sometimes the scripts are added by the document.write. Don't use this method, as the rest of the page will await for script loading and execution.
+
+There is also a variation named document.writeln(text) which appends '\n' after the text.
+
+When the page finishes loading, the document becomes closed. An attempt to document.write in it will cause the contents to be erased.
 </pre>
 </div>
 </div>
@@ -361,7 +460,7 @@ myObj[rand] = "Random Number";
 myObj[obj] = "Object";
 myObj[""] = "Even an empty string";
 
-document.write(print_r(myObj,true).trim());
+printData('myObj', myObj);
 })();
 </script>
 </pre>
@@ -375,6 +474,13 @@ Now that you've been introduced to the language I'd like to provide a couple met
 
 <a href="http://jsfiddle.net/">http://jsfiddle.net/</a>
 <a href="http://jsbin.com/">http://jsbin.com/</a>
+<a href="http://livecoding.io/">http://livecoding.io/</a>
+<a href="https://compilr.com/">https://compilr.com/</a>
+
+Minify And Beautify JavaScript Code
+
+<a href="http://dean.edwards.name/packer/">http://dean.edwards.name/packer/</a>
+<a href="http://jsbeautifier.org/">http://jsbeautifier.org/</a>
 
 Another approach is to simply create an HTML file containing the program and load it in your browser. For example, you could create a file called <i>test.html</i> with the following content:
 </pre>
@@ -386,6 +492,15 @@ document.write("Hello World!");
 </pre>
 <pre class="brush:html">
 &lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
+</pre>
+<pre>
+Hosting Environments
+
+<a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a>
+<a href="https://www.heroku.com/">Heroku</a>
+<a href="http://www.000webhost.com/">000webhost</a>
+<a href="http://www.webs.com/">Webs</a>
+<a href="https://sites.google.com/">Google Sites</a>
 </pre>
 </div>
 </div>
@@ -426,8 +541,8 @@ JSLitmus is a lightweight tool for creating ad-hoc JavaScript benchmark tests.
 This is how you examine the performance between function expression and function constructor using JSLitmus:
 </pre>
 <pre class="brush:js">
-JSLitmus.test("new Function ... ", function(){
-	return new Function("for(var i=0; i<100; i++) {}"); 
+JSLitmus.test(&apos;new Function ... &apos;, function(){
+	return new Function(&apos;for(var i=0; i<100; i++) {}&apos;); 
 });
 
 JSLitmus.test("function() ...", function(){
@@ -491,7 +606,7 @@ unixDate["Math.round(+new Date() / 1000)"] = Math.round(+new Date() / 1000);
 unixDate["Math.floor((new Date()).getTime() / 1000)"] = Math.floor((new Date()).getTime() / 1000);
 unixDate["Date.now() / 1000 | 0"] = Date.now() / 1000 | 0;
 
-document.write(print_r(unixDate,true).trim());
+printData('unixDate', unixDate);
 })();
 </script>
 </pre>
@@ -534,7 +649,7 @@ myDate["new Date().getTime()"] = new Date().getTime();
 myDate["Number(new Date())"] = Number(new Date());
 myDate["new Date().valueOf()"] = new Date().valueOf();
 
-document.write(print_r(myDate,true).trim());
+printData('myDate', myDate);
 })();
 </script>
 </pre>
@@ -583,7 +698,8 @@ When you are writing JavaScript code, you can use the following methods to send 
 Other console methods are also available, though they may differ from one browser to another. The consoles also provide the ability to set break points and watch expressions in your code for debugging purposes.
 
 Typing <i>$0</i> in Chrome will log the currently selected element.
-Typing <i>$1</i> in Chrome will log the previously selected element ans so forth.
+Typing <i>$1</i> in Chrome will log the previously selected element and so forth.
+Typing <i>$n</i> in Chrome will log the n<sup>th</sup> previously selected element.
 </pre>
 </div>
 </div>
@@ -597,7 +713,6 @@ Different methods of invoking a function declaration. Even though in some browse
 <a href="http://jsperf.com/self-invoking-function">http://jsperf.com/self-invoking-function</a>
 
 <h3>Self-Invoking Functions</h3>
-
 Ideally you should be able to do all this simply as:
 </pre>
 <pre class="brush:js">
@@ -664,7 +779,7 @@ function MyClass(){
 new MyClass().prop;
 </pre>
 <pre>
-Code 2
+Code 2:
 </pre>
 <pre class="brush:js">
 new (function(){
@@ -690,7 +805,7 @@ new (getNamespace()).Class;
 new namespace.Class;
 </pre>
 <pre>
-Without the parentheses around the call to getNamespace(), this would be parsed as (new getNamespace()).Class � it would call instantiate the getNamespace class and return the Class property of the new instance.
+Without the parentheses around the call to getNamespace(), this would be parsed as (new getNamespace()).Class — it would call instantiate the getNamespace class and return the Class property of the new instance.
 </pre>
 </div>
 </div>
@@ -698,7 +813,7 @@ Without the parentheses around the call to getNamespace(), this would be parsed 
 <div class="span12">
 <h2>void Operator</h2>
 <pre>
-The void operator evaluates the given expression and then returns undefined.
+The void operator takes a single operand, evaluates the given expression, and then returns undefined. This is not useful, and it is very confusing. Avoid void.
 
 <b>Uses</b>
 
@@ -771,7 +886,7 @@ delete y;       // returns false (delete doesn't affect variable names)
 delete Math.PI; // returns false (delete doesn't affect certain predefined properties)
 delete myobj.h; // returns true  (user-defined properties can be deleted)
  
-with(myobj) { 
+with (myobj) { 
 	delete k;   // returns true  (equivalent to delete myobj.k)
 } 
  
@@ -890,7 +1005,7 @@ The ECMAScript 5 specification of the function parseInt no longer allows impleme
 
 The parseInt function produces an integer value dictated by interpretation of the contents of the string argument according to the specified radix. Leading white space in string is ignored. If radix is undefined or 0, it is assumed to be 10 except when the number begins with the character pairs 0x or 0X, in which case a radix of 16 is assumed. If radix is 16, number may also optionally begin with the character pairs 0x or 0X.
 
-This differs from ECMAScript 3, which discouraged but allowed octal interpretation.
+This differs from <a href="http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262,%203rd%20edition,%20December%201999.pdf">ECMAScript 3</a>, which discouraged but allowed octal interpretation.
 
 Since many implementations have not adopted this behavior as of 2011, and because older browsers must be supported, always specify a radix.
 
@@ -964,7 +1079,9 @@ Use it unless you want specific features of other types.
 Use it when either:
 
 You're writing code where performance is important for SpiderMonkey (like FireFox plugins) and you don't need error detection.
+
 You need integer and care resulting JavaScript size.
+
 parseFloat(number)
 
 parseFloat() works like + with the one exception - it processes number until first invalid character instead of returning NaN. It's very fast (but not as fast as ~~ on Firefox) in V8. Unlike parseInt variation, it should be safe with Array.prototype.map.
@@ -972,7 +1089,9 @@ parseFloat() works like + with the one exception - it processes number until fir
 Use it when either:
 
 You're writing performance-critical code for Node.js or you're writing Google Chrome plugins (V8).
+
 You need to ignore errors (for example change 42.13px to 42.13)
+
 Number(number)
 
 Avoid it. It works just like + prefix and is usually slower. The only usage where it could be useful is callback for Array.prototype.map - you cannot use + as callback.
@@ -1046,7 +1165,7 @@ function test(){
 	bar(); // "this will run!"
 	var foo = function(){ // function expression assigned to local variable 'foo'
 		alert("this won't run!");
-	}
+	};
 	function bar(){ // function declaration, given the name 'bar'
 		alert("this will run!");
 	}
@@ -1062,9 +1181,9 @@ That covers the basics of hoisting, which is not as complex or confusing as it s
 
 The most important special case to keep in mind is name resolution order. Remember that there are four ways for names to enter a given scope. The order I listed them above is the order they are resolved in. In general, if a name has already been defined, it is never overridden by another property of the same name. This means that a function declaration takes priority over a variable declaration. This does not mean that an assignment to that name will not work, just that the declaration portion will be ignored. There are a few exceptions:
 
--The built-in name arguments behaves oddly. It seems to be declared following the formal parameters, but before function declarations. This means that a formal parameter with the name arguments will take precedence over the built-in, even if it is undefined. This is a bad feature. Don't use the name arguments as a formal parameter.
--Trying to use the name this as an identifier anywhere will cause a SyntaxError. This is a good feature.
--If multiple formal parameters have the same name, the one occurring latest in the list will take precedence, even if it is undefined.
+- The built-in name arguments behaves oddly. It seems to be declared following the formal parameters, but before function declarations. This means that a formal parameter with the name arguments will take precedence over the built-in, even if it is undefined. This is a bad feature. Don't use the name arguments as a formal parameter.
+- Trying to use the name this as an identifier anywhere will cause a SyntaxError. This is a good feature.
+- If multiple formal parameters have the same name, the one occurring latest in the list will take precedence, even if it is undefined.
 
 <b>Named Function Expressions</b>
 
@@ -1101,7 +1220,7 @@ function foo(a, b, c){
 <pre>
 What the Standard Says
 
-I find that it's often useful to just consult the ECMAScript Standard (pdf) directly to understand how these things work. Here's what it has to say about variable declarations and scope (section 12.2.2):
+I find that it's often useful to just consult the <a href="http://www.ecma-international.org/ecma-262/5.1/">ECMAScript Standard</a> (<a href="http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf">pdf</a>) directly to understand how these things work. Here's what it has to say about variable declarations and scope (section 12.2.2):
 
 If the variable statement occurs inside a FunctionDeclaration, the variables are defined with function-local scope in that function, as described in section 10.1.3. Otherwise, they are defined with global scope (that is, they are created as members of the global object, as described in section 10.1.3) using property attributes { DontDelete }. Variables are created when the execution scope is entered. A Block does not define a new execution scope. Only Program and FunctionDeclaration produce a new scope. Variables are initialized to undefined when created. A variable with an Initializer is assigned the value of its AssignmentExpression when the VariableStatement is executed, not when the variable is created.
 </pre>
@@ -1112,48 +1231,305 @@ If the variable statement occurs inside a FunctionDeclaration, the variables are
 <h2>Primitive and Reference Types</h2>
 <pre>
 <h3>What are types?</h3>
-Even though JavaScript has no concept of classes, it still makes use of types. Types are the closest that you will get to classes in JavaScript and there are two kinds: primitive and reference. Primitive
-types are not stored as objects but rather as simple data types. Reference types are stored as objects, which are really just references to locations in memory rather than a simple value. The tricky part is that JavaScript can make primitive types look like reference types. It does this in order to make the language more consistent for the developer even though it involves a little sleight-of-hand. Primitive values and reference values still behave quite differently even when they appear to be the same.
+Even though JavaScript has no concept of classes, it still makes use of types. Types are the closest that you will get to classes in JavaScript and there are two kinds: primitive and reference. Primitive types are not stored as objects but rather as simple data types. Reference types are stored as objects, which are really just references to locations in memory rather than a simple value. The tricky part is that JavaScript can make primitive types look like reference types. It does this in order to make the language more consistent for the developer even though it involves a little sleight-of-hand. Primitive values and reference values still behave quite differently even when they appear to be the same.
 
 While other programming languages distinguish between primitive and reference types by storing primitives on the stack and references in the heap, JavaScript does away with this concept completely. Instead, there is the concept of a variable object that tracks variables for a particular scope. Primitive values are stored directly on the variable object while reference values place a pointer in the variable object. That pointer is a reference to a location in memory where the object is stored. There are, of course, other differences between the two types.
 
-<h3>Primitives</h3>
+<h3>Primitive</h3>
+Primitive types represent simple pieces of data that are stored as-is. There are five primitive types
+in JavaScript:
 
+• String - a sequence of characters delimited by either single or double quotes. JavaScript has
+no concept of a character type, so characters are represented as single character strings.
+• Number - any numeric value. Both integer and floating-point values are stored using this
+type.
+• Boolean - true or false.
+• Null - a primitive type that has only one value, null.
+• Undefined - a primitive type has only one value, undefined. This is the value assigned to a
+variable that is not initialized.
 
+Some examples:
+<pre class="brush:js">
+// strings
+var name = "Andrew";
+var selection = "a";
+
+// numbers
+var count = 25;
+var cost = 1.51;
+
+// boolean
+var found = true;
+
+// null
+var object = null;
+
+// undefined
+var flag = undefined;
+var ref; // assigned undefined automatically
+</pre>
+Primitive values behave in a way that's consistent with many languages. A variable holding a primitive value contains the actual value (as opposed to a pointer to an object). When you assign a primitive value to the variable, the value gets copied into that variable. That means if you assign one variable to another, each variable gets its own copy of the data. For example:
+<pre class="brush:js">
+var color1 = "red";
+var color2 = color1;
+</pre>
+Here, color1 is assigned the value of "red". The variable color2 is then assigned the value of color1, which creates a new value of "red" and stores it in color2. Now even though color1 and color2 contain the same value, they are completely separate from one another.
+
+color1 -> "red"
+color2 -> "red"
+
+You can change the value in color1 without affecting color2 and vice versa.
 
 <h3>Identifying Primitive Types</h3>
+The best way to identify primitive types is to use the typeof operator. This operator works on any variable and returns a string indicating the type of data. The typeof operator works well with strings, numbers, booleans, and undefined:
+<pre class="brush:js">
+console.log(typeof "Andrew"); // "string"
+console.log(typeof 10); // "number"
+console.log(typeof 5.1); // "number"
+console.log(typeof true); // "boolean"
+console.log(typeof undefined); // "undefined"
+</pre>
+As you might expect, typeof returns "string" when the value is a string, "number" when the value is a number (regardless of integer or floating-point values), "boolean" when the value is a boolean, and "undefined" when the value is undefined. The tricky part involves null.
 
+You wouldn't be the first developer to be confused about the result of this line of code:
+<pre class="brush:js">
+console.log(typeof null); // "object"
+</pre>
+When you run typeof null, the result is "object". This has been acknowledged as an <a href="https://mail.mozilla.org/pipermail/es-discuss/2012-July/024209.html">error</a> by
+TC-39, the committee that designs and maintains JavaScript. You could reason that null is an empty object pointer and therefore "object" is a logical return value, but in reality, this just tends to confuse everybody. The best way to determine if a value is null is to compare it against null directly:
+<pre class="brush:js">
+console.log(value === null); // true or false
+</pre>
+Note that this code uses the triple equals operator instead of the double equals operator. Triple equals does the comparison without converting the variable to another type. To understand why this is important, consider the following:
+<pre class="brush:js">
+console.log("5" == 5); // true
+console.log("5" === 5); // false
 
-
+console.log(undefined == null); // true
+console.log(undefined === null); // false
+</pre>
+Using the double equals, the string "5" and the number 5 are considered equal. That's because the double equals converts the string into a number and then does the comparison. Using the triple equals, however, these values are not considered equal because they are two different types. Likewise, when comparing undefined and null, the double equals says that they are equivalent while the triple equals says they are not. So when trying to identify null, it's important to always use triple equals so that you can correctly identify the type.
 
 <h3>Primitive Methods</h3>
+You may be surprised to learn that strings, numbers, and booleans have methods despite being primitive types (null and undefined do not have any methods). Strings, in particular, have a large number of methods to help you work with them. Some examples:
+<pre class="brush:js">
+var name = "Andrew";
+var lowercaseName = name.toLowerCase(); // convert to lowercase
+var firstLetter = name.charAt(0); // get first character
+var middleOfName = name.substring(2, 5); // get characters 2-4
 
+var count = 10;
+var fixedCount = count.toFixed(2); // convert to "10.00"
+var hexCount = count.toString(16); // convert to "a"
 
-
+var flag = true;
+var stringFlag = flag.toString(); // convert to "true"
+</pre>
+Despite having methods, primitive values themselves are not objects. JavaScript makes it look like these values are objects to provide a consistent experience in the language. Exactly how this works is explained later in this chapter.
 
 <h3>Reference Types</h3>
+Reference types represent objects in JavaScript and are the closest things to classes that you will find in the language. Reference values are instances of reference types and are synonymous with objects. An object is an unordered list of properties consisting of a name and a value. When the value of a property is a function, it is called a method. Because functions themselves are actually reference values in JavaScript, there is little difference between a property that contains a string and a property that contains a function except that a function can be executed. It sometimes helps to think of JavaScript objects as nothing more than hash tables.
 
+name -> value
+name -> value
 
+Objects are said to be instantiated when they are first created, and there are a couple of different ways to create them. The first is to use the new operator with a constructor. A constructor is simply a function that is used to create an object using new. There is no real difference between a constructor and any other function except for how it is used. By convention, constructors in JavaScript begin with a capital letter to distinguish them from non-constructor functions. The following code instantiates a generic object:
+<pre class="brush:js">
+var object = new Object();
+</pre>
+Reference values behave a bit differently than primitive values. The variable holding a reference value doesn't contain the actual object. Instead, the variable holds a pointer (a.k.a. reference) to a location in memory where the object exists. When you assign a reference value to a variable, you're actually assigning a pointer. That means if you assign one variable to another, each variable gets a copy of the pointer, and both variables still reference the same object in memory. For example:
+<pre class="brush:js">
+var object1 = new Object();
+var object2 = object1;
+</pre>
+In this code, an object is created and a reference is stored in object1. Then, object2 is assigned the value of object1. There is still only one instance of the object that was created on the first line but both variables now point to the same object.
 
+object1 --\
+			Object (memory)
+object2 --/
+
+Two variables pointing to one object
+
+Because JavaScript is a garbage collected language, you don't really need to worry about memory allocations. However, it is best to dereference objects when you no longer need them so the garbage collector can free up that memory. The best way to do this is to set the object variable to null, such as:
+<pre class="brush:js">
+var object1 = new Object();
+// do something
+object1 = null; // dereference
+</pre>
+In this example, object1 is created and used before finally being set to null. When there are no more references to an object in memory, the garbage collector is able to free up that memory. Dereferencing objects becomes important in very large applications that use millions of objects.
+
+Another interesting aspect of objects in JavaScript is that you can add and remove properties at any time. For example:
+<pre class="brush:js">
+var object1 = new Object();
+var object2 = object1;
+
+object1.myCustomProperty = "Awesome!";
+console.log(object2.myCustomProperty)); // "Awesome!"
+</pre>
+Here, myCustomProperty is added to object1 with a value of "Awesome!". Because both object1 and object2 point to the same object, that property is also accessible on object2. This is one of the unique aspects of JavaScript: it allows you to modify objects whenever you want even if you didn't define the objects in the first place. There are ways to prevent such modification and those are discussed later in this book.
 
 <h3>Built-In Types</h3>
+There are several built-in reference types in JavaScript that can be instantiated at any time:
+• Array - an ordered list of numerically indexed values.
+• Date - a date and time.
+• Error - a runtime error. There are also several subtypes of this type for more specific errors.
+• Function - a function.
+• Object - a generic object.
+• RegExp - a regular expression.
 
+Each of these built-in reference types can be instantiated using new, such as:
+<pre class="brush:js">
+var items = new Array();
+var now = new Date();
+var error = new Error("Something bad happened.");
+var func = new Function("console.log('Hi');");
+var object = new Object();
+var re = new RegExp("\\d+");
+</pre>
+Several of these reference types also have literal forms. A literal is special syntax that allows you to define a value, both primitive and reference, without explicitly creating an object. Earlier in this chapter, you saw string literals, number literals, boolean literals, the null literal, and the undefined literal. Those are all primitive literals. Reference literals allow you to define objects without using their constructor.
 
+For example, you can create an object (similar to new Object()) by using object literal syntax. An object literal is made up of curly braces with properties defined inside. Properties are made up of an identifier or string, a colon, and a value. Multiple properties are separated by commas. For example:
+<pre class="brush:js">
+// "Awesome!"
 
+var book = {
+	name: "Principles of Object-Oriented Programming in JavaScript",
+	year: 2012
+};
+</pre>
+You can also use string literals as property names, Which allow you to have property names with
+spaces or other special characters:
+<pre class="brush:js">
+var book = {
+	"name": "Principles of Object-Oriented Programming in JavaScript",
+	"year": 2012
+};
+</pre>
+Both of these examples are logically equivalent to the following:
+<pre class="brush:js">
+var book = new Object();
+book.name = "Principles of Object-Oriented Programming in JavaScript";
+book.year = 2012;
+</pre>
+Keep in mind that using an object literal doesn't actually call new Object(). Instead, the JavaScript engine follows the same steps without actually using the constructor. This is true for all reference literals.
+
+Similarly, you can define an array literal by enclosing any number of values, separated by commas, inside of square brackets. For example:
+<pre class="brush:js">
+var colors = ["red", "blue", "green"];
+console.log(colors[0]); // "red"
+
+// equivalent
+
+var colors = new Array("red", "blue", "green");
+console.log(colors[0]); // "red"
+</pre>
+Functions, of course, are almost always defined using their literal form. In fact, it's discouraged to use the Function constructor at all. It's much easier and far less error-prone to use the literal form.
+
+For example:
+<pre class="brush:js">
+function reflect(value) {
+	return value;
+}
+
+// same as
+
+var reflect = new Function("value", "return value;");
+</pre>
+This code defines the function called reflect() that simply passes back the value that is passed in. Even for this simple function, the literal form is much easier to write and understand than the constructor form. Further, there is no good way to debug functions that are created in the constructor form. You'll only ever rarely see code using the Function constructor.
+
+JavaScript also has regular expression literals that allow you to define regular expressions without using the RegExp constructor. Regular expression literals look very similar to regular expressions in Perl. The pattern itself is contained between two slashes and any additional options are single characters after the second slash. For example:
+<pre class="brush:js">
+var numbers = /\d+/g;
+// same as
+var numbers = new RegExp("\\d+", "g");
+</pre>
+The literal form of regular expressions in JavaScript is a little bit easier to deal with because you don't need to worry about escaping characters within strings. When using the RegExp constructor, the pattern is passed in as a string and therefore backslashes must be escaped (which is why \d is used in the literal and \\d is used in the string). Regular expression literals are used most of the time in JavaScript except in cases where the regular expression is being constructed dynamically from one or more strings.
+
+With the exception of Function, there really isn't any right or wrong way to instantiate built-in types. Many developers prefer using literals while some prefer using constructors. The choice of which to use is completely up to you.
+
+Property Access
+
+As discussed previously, properties are name-value pairs stored on an object. The primary way that properties are accessed on objects is through dot notation. Dot notation is very common in object-oriented languages and is the most frequently used property access pattern in JavaScript. However, it's also possible to access properties on JavaScript objects using bracket notation with a string. Consider this code using dot notation:
+<pre class="brush:js">
+var array = [];
+array.push(12345);
+
+// bracket notation
+
+var array = [];
+array["push"](12345);
+</pre>
+Note that the name of the method is now included in a string that's enclosed in square brackets. This syntax may seem a little strange, but is very useful when you want to dynamically decide what property to access. For example:
+<pre class="brush:js">
+var array = [];
+var method = "push";
+array[method](12345);
+</pre>
+Bracket notation allows you to use a variable instead of the string literal to specify the property to access. Here, the variable method has a value of "push", so push() ends up being called on the array. This capability comes is quite useful and will be used several times throughout this book. The important thing to keep in mind is that there is no difference, performance or otherwise, between using dot notation and bracket notation outside of the syntax. Developers tend to find dot notation easier to read and so it is used more frequently than bracket notation.
+
+<h3>Identifying Reference Types</h3>
+
+The easiest reference type to identify is a function because you can use the typeof operator. When used with a function, typeof returns "function":
+<pre class="brush:js">
+function reflect(value) {
+	return value;
+}
+
+console.log(typeof reflect); // "function"
+</pre>
+Other reference types are a little bit trickier because typeof doesn't provide any additional detail. For all reference types except functions, typeof returns "object". That's not very helpful when you're dealing with a lot of different types.
+
+To make identifying reference types easier, JavaScript has the instanceof operator. The instanceof operator is used with a value and a constructor. When the value is an instance of the type identified with the constructor, then instanceof returns true, otherwise it returns false. Here are some examples:
+<pre class="brush:js">
+var items = [];
+var object = {};
+
+function reflect(value) {
+	return value;
+}
+
+console.log(items instanceof Array); // true
+console.log(object instanceof Object); // true
+console.log(object instanceof Array); // false
+console.log(reflect instanceof Function); // true
+</pre>
+It's also important to understand that instanceof works with inheritance. That means every object is actually an instance of Object because every reference type inherits from Object:
+<pre class="brush:js">
+var items = [];
+var object = {};
+
+function reflect(value) {
+return value;
+}
+
+console.log(items instanceof Array); // true
+console.log(items instanceof Object); // true
+console.log(object instanceof Object); // true
+console.log(object instanceof Array); // false
+console.log(reflect instanceof Function); // true
+console.log(reflect instanceof Object); // true
+</pre>
+Inheritance is discussed later in the book, but for now, all you need to know is that all objects inherit from Object.
+
+Although instanceof can be used to identify arrays, there is one exception that affects web developers specifically. JavaScript values can be passed back and forth between frames in the same webpage. That's normally not a problem unless you try to identify the type of a reference value. Since each webpage has its own global context, that means each webpage has its own version of Object, Array, and all other built-in types. So if you pass an array from one frame into another frame, using instanceof doesn't work because the array is actually an instance of Array from a different frame.
+
+To solve this problem, ECMAScript 5 introduced Array.isArray(), which definitively identifies the value as an instance of Array regardless of the value's origin. This method returns true when a value is passed in that is a native array from any context. If you are using ECMAScript 5 compliant environment, then Array.isArray() is the best way to identify arrays:
+<pre class="brush:js">
+var items = [];
+console.log(Array.isArray(items)); // true
+</pre>
+The Array.isArray() method is supported in Node.js, WebKit-based browsers, Gecko-based browsers, Opera, and Internet Explorer 9+.
 
 <h3>Primitive Wrapper Types</h3>
 Perhaps the most confusing part of JavaScript is the concept of primitive wrapper types. There are three primitive wrapper types: String, Number, and Boolean. These primitive wrapper types exist because JavaScript aims to make working with primitive values as easy as working with objects. It would be very confusing if you had to use a different syntax or switch to a procedural style just to get a substring of text.
 
 The primitive wrapper types are reference types just like any other, however, they are automatically created behind-the-scenes whenever strings, numbers, or booleans are read. Consider the following example:
-</pre>
 <pre class="brush:js">
 var name = "Andrew";
 var firstChar = name.charAt(0);
 console.log(firstChar); // "A"
 </pre>
-<pre>
 On the first line of code, a primitive string value is assigned to name. In the second line, name is used as if it were an object and charAt(0) is called using dot notation. Behind-the-scenes, this is what actually is happening:
-</pre>
 <pre class="brush:js">
 var name = "Andrew";
 var temp = new String(name);
@@ -1161,31 +1537,24 @@ var firstChar = temp.charAt(0);
 temp = null;
 console.log(firstChar); // A
 </pre>
-<pre>
 Because the second line is using a string as if it's an object, the JavaScript engine creates an instance of String so that charAt(0) will work. The String object exists only for a single statement before it is destroyed, a process called autoboxing. You can test this out by trying to add a property to a string as if it were a regular object:
-</pre>
 <pre class="brush:js">
-// What the JavaScript engine does
 var name = "Andrew";
 name.last = "Gerst";
 console.log(name.last); // undefined
 </pre>
-<pre>
 This code attempts to add a property called last to the string name. There is nothing wrong with this code, either syntactically or otherwise, except that the property disappears. With regular objects, you can add properties at any time and they stay until you manually remove them. With primitive wrapper types, properties seem to disappear because the object on which the property was assigned is actually destroyed. Here's what's actually happening in the JavaScript engine:
-</pre>
 <pre class="brush:js">
 // What the JavaScript engine does
-var name = Andrew";
+var name = "Andrew";
 var temp = new String(name);
 temp.last = "Gerst";
 temp = null;
 console.log(name.last); // undefined
 </pre>
-<pre>
 So instead of assigning a new property to a string, the code actually creates a new property on a temporary object that is then destroyed.
 
 Since reference values are created automatically for primitive values, that means you can actually use instanceof to check for these types of values;
-</pre>
 <pre class="brush:js">
 var name = "Andrew";
 var count = 10;
@@ -1195,11 +1564,9 @@ console.log(name instanceof String); // true
 console.log(count instanceof Number); // true
 console.log(found instanceof Boolean); // true
 </pre>
-<pre>
 The reason this works is because of the temporary object being created with the primitive value is read. The temporary object is, technically, an instance of the particular primitive wrapper type. It is still best to use typeof when trying to identify primitive values, but it is important to understand why instanceof works in this way.
 
 Because primitive wrapper types are reference types just like any other, you can actually create them manually as well. However, there are some side effects:
-</pre>
 <pre class="brush:js">
 var name = new String("Andrew");
 var count = new Number(10);
@@ -1209,9 +1576,7 @@ console.log(typeof name); // "object"
 console.log(typeof count); // "object"
 console.log(typeof found); // "object"
 </pre>
-<pre>
 When you create an instance of the primitive wrapper type, you have now created an object just like any other. That means typeof can no longer identify the type of data you are intending to store. Also, you cannot use these objects the same way that you use primitive values. The best example is with a Boolean object:
-</pre>
 <pre class="brush:js">
 var found = new Boolean(false);
 
@@ -1219,8 +1584,27 @@ if (found) {
 	console.log("Found"); // this executes
 }
 </pre>
-<pre>
 There are other confusing circumstances when you instantiate primitive wrappers on your own. It's recommended to avoid doing so unless you have figured out the special case where it makes sense. Most of the time, using primitive wrapper objects instead of primitives will only lead to errors.
+<h3>Summary</h3>
+While JavaScript has no formal concept of classes, it does have the concept of types. Each variable
+or piece of data has a specific type associated with it. That type can be a primitive or a reference.
+There are five primitive types: strings, numbers, booleans, null, and undefined. These represent
+simple values that are stored directly in the variable object for a given context. Primitive types can
+be identified using typeof with the exception of null, which must be compared directly against the
+special value null.
+
+Reference types are the closest thing to classes in JavaScript. Objects are said to be instances of
+reference types. You can create new objects by using the new operator or by using a reference literal.
+Properties and methods are primarily accessed using dot notation but can also be accessed using
+bracket notation. Functions are objects in JavaScript just like anything else, it can be identified by using the typeof operator. Other reference types should use instanceof with a constructor to
+determine the type of object.
+
+In order to make primitives seem more like references, JavaScript has three primitive wrapper types:
+String, Number, and Boolean. These are used whenever you access a primitive value corresponding
+to one of these types. These objects are created behind-the-scenes so that you can access methods
+on primitives as if they were regular objects. However, those objects are only temporary and are
+destroyed as soon as statement is complete. While it's possible to create your own instances of
+primitive wrappers, it's not recommended because it can lead to confusing situations.
 </pre>
 </div>
 </div>
@@ -1234,32 +1618,34 @@ An object constructor is merely a regular JavaScript function, so it's just as r
 
 Lets use a real world item "cat" as an example. A property of a cat may be its color or name. A method may be to "meeyow". The important thing to realize, however is that every cat will have a different name or even meeyow noise. To create an object type that accommodates this need for flexibility, we'll use an object constructor.
 
-Here the function "cat()" is an object constructor, and its properties and methods are declared inside it by prefixing them with the keyword "this." Objects defined using an object constructor are then instantiated using the new keyword. Notice how we're able to easily define multiple instances of cat, each with its own name- that's the flexibility object constructor brings to custom objects. Constructors create the blueprints for objects, not the object itself.
+Here the function "Cat" is an object constructor, and its properties and methods are declared inside it by prefixing them with the keyword "this." Objects defined using an object constructor are then instantiated using the new keyword. Notice how we're able to easily define multiple instances of cat, each with its own name- that's the flexibility object constructor brings to custom objects. Constructors create the blueprints for objects, not the object itself.
+
+Object Constructors are capitalized by convention. A constructor name should begin with an uppercase letter.
 </pre>
 <pre class="brush:js">
-function cat(name){
+function Cat(name){
 	this.name = name;
 	this.talk = function(){
 		log(this.name + " say meeow!");
 	};
 } 
 
-cat1 = new cat("felix");
+cat1 = new Cat("felix");
 cat1.talk(); // "felix says meeow!"
 
-cat2 = new cat("ginger");
+cat2 = new Cat("ginger");
 cat2.talk(); // "ginger says meeow!"
 
-cat.prototype.changeName = function(name){
+Cat.prototype.changeName = function(name){
 	this.name = name;
 };
 
-firstCat = new cat("pursur");
+firstCat = new Cat("pursur");
 firstCat.changeName("bill");
 firstCat.talk(); // "bill says meeow!"
 
 // What we want to do (chaining) methods:
-new cat("kitty").changeName("hal buttar").talk();
+new Cat("kitty").changeName("hal buttar").talk();
 // Uncaught TypeError: Cannot call method 'talk' of undefined.
 // Remember, all functions return "undefined" if you don't specify what should be returned.
 </pre>
@@ -1268,31 +1654,31 @@ new cat("kitty").changeName("hal buttar").talk();
 (function(){
 log.clear();
 
-function cat(name){
+function Cat(name){
 	this.name = name;
 	this.talk = function(){
 		log(this.name + " say meeow!");
 	};
 } 
 
-var cat1 = new cat("felix");
+var cat1 = new Cat("felix");
 cat1.talk(); // "felix says meeow!"
 
-var cat2 = new cat("ginger");
+var cat2 = new Cat("ginger");
 cat2.talk(); // "ginger says meeow!"
 
-cat.prototype.changeName = function(name){
+Cat.prototype.changeName = function(name){
 	this.name = name;
 };
 
-var firstCat = new cat("pursur");
+var firstCat = new Cat("pursur");
 firstCat.changeName("bill");
 firstCat.talk(); // "bill says meeow!"
 
-document.write(print_r(cat1,true)+"\n");
-document.write(print_r(cat2,true)+"\n");
-document.write(print_r(firstCat,true)+"\n");
-document.write(print_r(log.history, true).trim());
+printData('cat1',cat1);
+printData('cat2',cat2);
+printData('firstCat',firstCat);
+printData('log',log.history);
 })();
 </script>
 </pre>
@@ -1306,7 +1692,7 @@ Prototyping works on both custom objects and select prebuilt objects, such as Da
 Right now we can't chain the methods together but we can easily fix this by returning this inside the cat object's methods.
 </pre>
 <pre class="brush:js">
-function cat(name){
+function Cat(name){
 	this.name = name;
 	this.talk = function(){
 		log(this.name + " say meeow!");
@@ -1314,29 +1700,29 @@ function cat(name){
 	};
 } 
 
-cat.prototype.changeName = function(name){
+Cat.prototype.changeName = function(name){
 	this.name = name;
 	return this;
 };
 
-cat1 = new cat("felix");
+cat1 = new Cat("felix");
 cat1.talk().talk().changeName("newFelix").talk();
 
-cat2 = new cat("ginger");
+cat2 = new Cat("ginger");
 cat2.talk().talk().changeName("newGinger").talk();
 
-firstCat = new cat("pursur");
+firstCat = new Cat("pursur");
 firstCat.changeName("newPursur").talk();
 
-new cat("hal buttar").talk().changeName("new hal buttar").talk().talk();
-new cat().talk().changeName("anonymous").talk();
+new Cat("hal buttar").talk().changeName("new hal buttar").talk().talk();
+new Cat().talk().changeName("anonymous").talk();
 </pre>
 <pre>
 <script>
 (function(){
 log.clear();
 
-function cat(name){
+function Cat(name){
 	this.name = name;
 	this.talk = function(){
 		log(this.name + " say meeow!");
@@ -1344,27 +1730,27 @@ function cat(name){
 	};
 } 
 
-cat.prototype.changeName = function(name){
+Cat.prototype.changeName = function(name){
 	this.name = name;
 	return this;
 };
 
-var cat1 = new cat("felix");
+var cat1 = new Cat("felix");
 cat1.talk().talk().changeName("newFelix").talk();
 
-var cat2 = new cat("ginger");
+var cat2 = new Cat("ginger");
 cat2.talk().talk().changeName("newGinger").talk();
 
-var firstCat = new cat("pursur");
+var firstCat = new Cat("pursur");
 firstCat.changeName("newPursur").talk();
 
-new cat("hal buttar").talk().changeName("new hal buttar").talk().talk();
-new cat().talk().changeName("anonymous").talk();
+new Cat("hal buttar").talk().changeName("new hal buttar").talk().talk();
+new Cat().talk().changeName("anonymous").talk();
 
-document.write(print_r(cat1,true)+"\n");
-document.write(print_r(cat2,true)+"\n");
-document.write(print_r(firstCat,true)+"\n");
-document.write(print_r(log.history, true).trim());
+printData('cat1',cat1);
+printData('cat2',cat2);
+printData('firstCat',firstCat);
+printData('log',log.history);
 })();
 </script>
 </pre>
@@ -1377,6 +1763,66 @@ document.write(print_r(log.history, true).trim());
 You can save state by using window.location.hash or window.location.search as they both are in the url.
 
 Changing location.search forces a page refresh which is most likely undesirable. Updating location.hash doesn't reload the page.
+</pre>
+</div>
+</div>
+<div class="row">
+<div class="span12">
+<h2>Creating shortcuts</h2>
+<pre>
+bind() is helpful in cases where you want to create a shortcut to a function which requires a specific this value.
+
+Take Array.prototype.slice, for example, which you want to use for converting an array-like object to a real array. You could create a shortcut like this:
+<pre class="brush:js">
+var slice = Array.prototype.slice;
+slice.call(arguments);
+</pre>
+With bind(), this can be simplified. In the following piece of code, slice is a bound function to the <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function/call">call()</a> function of Function.prototype, with the this value set to the slice() function of Array.prototype. This means that additional call() calls can be eliminated:
+<pre class="brush:js">
+var unboundSlice = Array.prototype.slice; // same as "slice" in the previous example
+var slice = Function.prototype.call.bind(unboundSlice);
+
+slice(arguments);
+</pre>
+</pre>
+</div>
+</div>
+<div class="row">
+<div class="span12">
+<h2>Statements and Expressions</h2>
+<pre>
+All the JavaScript code that you will write will, for the most part, be comprised of many separate statements. A statement can set a variable equal to a value. A statement can also be a function call, i.e. document.write(). Statements define what the script will do and how it will be done.
+
+In typical programming languages like C and PHP, the end of a statement is marked with a semicolon(;), but we have seen that the semicolon is optional in JavaScript. In JavaScript, the end of a statement is most often marked by pressing return and starting a new line. If you are an experienced programmer and prefer to use semicolons, feel free to do so. JavaScript will not malfunction from ending semicolons. The only time it is necessary to use a semicolon is when you choose to smash two statements onto one line (i.e. two document.write statements on one line).
+
+In addition to standard statements like changing a variable's value, assigning a new value, or calling a function, there are groups of statements that are distinct in their purpose. These distinct groups of statements include:
+
+- Conditional Statements
+- Loop Statements
+- Object Manipulation Statements
+- Comment Statements
+- Exception Handling Statements
+
+<h3>The function Statement Versus the function Expression</h3>
+JavaScript has a function statement as well as a function expression. This is confusing because they can look exactly the same. A function statement is shorthand for a var statement with a function value.
+
+The statement:
+<pre class="brush:js">
+function foo(){}
+// means about the same thing as:
+var foo = function foo(){};
+</pre>
+The second form makes it clear that foo is a variable containing a function value. To use the language well, it is important to understand that functions are values.
+
+function statements are subject to hoisting. This means that regardless of where a function is placed, it is moved to the top of the scope in which it is defined. This relaxes the requirement that functions should be declared before used, which I think leads to sloppiness. It also prohibits the use of function statements in if statements. It turns out that most browsers allow function statements in if statements, but they vary in how that should be interpreted. That creates portability problems.
+
+The first thing in a statement cannot be a function expression because the official grammar assumes that a statement that starts with the word function is a function statement. The workaround is to wrap the function expression in parentheses:
+<pre class="brush:js">
+(function(){
+	var hidden_variable;
+	// This function can have some impact on the environment, but introduces no new global variables.
+})();
+</pre>
 </pre>
 </div>
 </div>
@@ -1514,9 +1960,9 @@ Finally, a long-standing (and very annoying) bug has been resolved: Cases where 
 (function(){ ... }).call(null); // Exception 
 </pre>
 <pre>
-<b>with(){}</b>
+<b>with () {}</b>
 
-<i>with(){}</i> statements are dead when strict mode is enabled - in fact it even appears as a syntax error. While the feature was certainly mis-understood and possibly mis-used I'm not convinced that it's enough to be stricken from the record.
+<i>with () {}</i> statements are dead when strict mode is enabled - in fact it even appears as a syntax error. While the feature was certainly mis-understood and possibly mis-used I'm not convinced that it's enough to be stricken from the record.
 
 The changes made in ECMAScript 5 strict mode are certainly varied (ranging from imposing stylistic preferences, like removing with statements, to fixing legitimately bad language bugs, like the ability to redefine properties in object literals). It'll be interesting to see how people begin to adopt these points and how it'll change JavaScript development.
 </pre>
@@ -1528,7 +1974,7 @@ The changes made in ECMAScript 5 strict mode are certainly varied (ranging from 
 <pre>
 Version 6 is rumored to have support for classes, a concept long supported by languages like Java, C++ and C#, in addition to multiple new concepts and language features.
 
-In the July 2008 announcement, Eich also stated that the ECMAScript 4 proposal would be superseded by a new project, code-named ECMAScript Harmony. ECMAScript Harmony names the agreed design trajectory of post-ES5 editions. It will include syntactic extensions, but the changes will be more modest than ECMAScript 4 in both semantic and syntactic innovation. Packages, namespaces, and early binding from ECMAScript 4 are no longer included for planned releases. In addition, other goals and ideas from ECMAScript 4 are being rephrased to keep consensus in the committee; these include a notion of classes based on ECMAScript, 5th Edition (being an update to ECMAScript, 3rd edition). As of December 2009, there is no publicly announced release date for next edition within the ECMAScript Harmony trajectory. Depending on ECMA, that next edition may end up being called ECMAScript, 6th edition.
+In the July 2008 announcement, Eich also stated that the ECMAScript 4 proposal would be superseded by a new project, code-named ECMAScript Harmony. <a href="http://people.mozilla.org/~jorendorff/es6-draft.html">ECMAScript Harmony</a> names the agreed design trajectory of post-ES5 editions. It will include syntactic extensions, but the changes will be more modest than ECMAScript 4 in both semantic and syntactic innovation. Packages, namespaces, and early binding from ECMAScript 4 are no longer included for planned releases. In addition, other goals and ideas from ECMAScript 4 are being rephrased to keep consensus in the committee; these include a notion of classes based on ECMAScript, 5th Edition (being an update to ECMAScript, 3rd edition). As of December 2009, there is no publicly announced release date for next edition within the ECMAScript Harmony trajectory. Depending on ECMA, that next edition may end up being called ECMAScript, 6th edition.
 </pre>
 </div>
 </div>
@@ -1574,7 +2020,7 @@ o.p = 24;
 o.p // 42
  
 o.q = 12;
-for (var prop in os
+for (var prop in o) {}
 	console.log(prop)
 }
 // "q"
@@ -1598,7 +2044,7 @@ Object.keys(object)
 A usage example: In ES3, we use object literals that looks like:
 </pre>
 <pre class="brush:js">
-var obj = {foo: bar};
+var obj = { foo: bar };
 </pre>
 <pre>
 Notice that creating an object this way, strips the developer from any control over the created object. This has changed in ES5, where we can set those control flags mentioned earlier by doing:
@@ -1644,7 +2090,7 @@ For instance, consider the number 8 written in binary 00001000. If we wanted to 
 </pre>
 <pre class="brush:js">
 function mult_by_pow_2(number, power){
-    return number&lt;&lt;power;
+	return number&lt;&lt;power;
 }
 </pre>
 <pre>
@@ -1654,7 +2100,7 @@ But what happens if we shift a number like 128 and we're only storing it in a si
 
 It shouldn't surprise you that there's a corresponding right-shift operator: &gt;&gt; (especially considering that I mentioned it earlier). Note that a bitwise right-shift will be the equivalent of integer division by 2.
 
-Why is it integer division? Consider the number 5, in binary, 00000101. 5/2 is 2.5, but if you are performing integer division, 5/2 is 2. When you perform a right shift by one: (unsigned int)5&gt;&gt;1, you end up with 00000010, as the rightmost 1 gets shifted off the end; this is the representation of the number 2. Note that this only holds true for unsigned integers; otherwise, we are not guaranteed that the padding bits will be all 0s.
+Why is it integer division? Consider the number 5, in binary, 00000101. 5/2 is 2.5, but if you are performing integer division, 5/2 is 2. When you perform a right shift by one: (unsigned int) 5 &gt;&gt; 1, you end up with 00000010, as the rightmost 1 gets shifted off the end; this is the representation of the number 2. Note that this only holds true for unsigned integers; otherwise, we are not guaranteed that the padding bits will be all 0s.
 
 Generally, using the left and right shift operators will result in significantly faster code than calculating and then multiplying by a power of two. The shift operators are also be useful for manipulating individual bits.
 
@@ -1662,7 +2108,7 @@ A bitwise operation operates on one or more bit patterns or binary numerals at t
 
 The bitwise operators operate on numbers (always integers) as if they were sequences of binary bits (which, of course, internally to the computer they are). These operators will make the most sense, therefore, if we consider integers as represented in binary, octal, or hexadecimal (bases 2, 8, or 16), not decimal (base 10). Remember, you can use octal constants by prefixing them with an extra 0 (zero), and you can use hexadecimal constants by prefixing them with 0x (or 0X).
 
-The & operator performs a bitwise AND on two integers. Each bit in the result is 1 only if both corresponding bits in the two input operands are 1. For example, 0x56 & 0x32 is 0x12, because (in binary):
+The &amp; operator performs a bitwise AND on two integers. Each bit in the result is 1 only if both corresponding bits in the two input operands are 1. For example, 0x56 &amp; 0x32 is 0x12, because (in binary):
 
 	  0 1 0 1 0 1 1 0
 	& 0 0 1 1 0 0 1 0
@@ -1691,7 +2137,7 @@ The ~ (tilde) operator performs a bitwise complement on its single integer opera
 
 The &lt;&lt; operator shifts its first operand left by a number of bits given by its second operand, filling in new 0 bits at the right. Similarly, the >> operator shifts its first operand right. If the first operand is unsigned, &gt;&gt; fills in 0 bits from the left, but if the first operand is signed, &gt;&gt; might fill in 1 bits if the high-order bit was already 1. (Uncertainty like this is one reason why it's usually a good idea to use all unsigned operands when working with the bitwise operators.) For example, 0x56 &lt;&lt; 2 is 0x158:
 
-	      0 1 0 1 0 1 1 0 &lt;&lt; 2
+		  0 1 0 1 0 1 1 0 &lt;&lt; 2
 	  -------------------
 	  0 1 0 1 0 1 1 0 0 0
 
@@ -1699,18 +2145,18 @@ And 0x56 &gt;&gt; 1 is 0x2b:
 
 	  0 1 0 1 0 1 1 0 &gt;&gt; 1
 	  ---------------
-	    0 1 0 1 0 1 1
+		0 1 0 1 0 1 1
 
 For both of the shift operators, bits that scroll "off the end'' are discarded; they don't wrap around. (Therefore, 0x56 &gt;&gt; 3 is 0x0a.)
 
-The bitwise operators will make more sense if we take a look at some of the ways they're typically used. We can use & to test if a certain bit is 1 or not. For example, 0x56 & 0x40 is 0x40, but 0x32 & 0x40 is 0x00:
+The bitwise operators will make more sense if we take a look at some of the ways they're typically used. We can use &amp; to test if a certain bit is 1 or not. For example, 0x56 &amp; 0x40 is 0x40, but 0x32 &amp; 0x40 is 0x00:
 
 	  0 1 0 1 0 1 1 0	  0 0 1 1 0 0 1 0
 	& 0 1 0 0 0 0 0 0	& 0 1 0 0 0 0 0 0
 	  ---------------	  ---------------
 	  0 1 0 0 0 0 0 0	  0 0 0 0 0 0 0 0
 
-Because of the nature of base-2 arithmetic, it turns out that shifting left and shifting right are equivalent to multiplying and dividing by two. These operations are equivalent for the same reason that tacking zeroes on to the right of a number in base 10 is the same as multiplying by 10, and deleting digits from the right is the same as dividing by 10. You can convince yourself that 0x56 &lt;&lt; 2 is the same as 0x56 * 4, and that 0x56 &gt;&gt; 1 is the same as 0x56 / 2. It's also the case that masking off all but the low-order bits is the same as taking a remainder; for example, 0x56 & 0x07 is the same as 0x56 % 8. Some programmers therefore use &lt;&lt;, &gt;&gt;, and & in preference to *, /, and % when powers of two are involved, on the grounds that the bitwise operators are "more efficient." Usually it isn't worth worrying about this, though, because most compilers are smart enough to perform these optimizations anyway (that is, if you write x * 4, the compiler might generate a left shift instruction all by itself), they're not always as readable, and they're not always correct for negative numbers.
+Because of the nature of base-2 arithmetic, it turns out that shifting left and shifting right are equivalent to multiplying and dividing by two. These operations are equivalent for the same reason that tacking zeroes on to the right of a number in base 10 is the same as multiplying by 10, and deleting digits from the right is the same as dividing by 10. You can convince yourself that 0x56 &lt;&lt; 2 is the same as 0x56 * 4, and that 0x56 &gt;&gt; 1 is the same as 0x56 / 2. It's also the case that masking off all but the low-order bits is the same as taking a remainder; for example, 0x56 &amp; 0x07 is the same as 0x56 % 8. Some programmers therefore use &lt;&lt;, &gt;&gt;, and &amp; in preference to *, /, and % when powers of two are involved, on the grounds that the bitwise operators are "more efficient." Usually it isn't worth worrying about this, though, because most compilers are smart enough to perform these optimizations anyway (that is, if you write x * 4, the compiler might generate a left shift instruction all by itself), they're not always as readable, and they're not always correct for negative numbers.
 
 The issue of negative numbers, by the way, explains why the right-shift operator &gt;&gt; is not precisely defined when the high-order bit of the value being shifted is 1. For signed values, if the high-order bit is a 1, the number is negative. (This is true for 1's complement, 2's complement, and sign-magnitude representations.) If you were using a right shift to implement division, you'd want a negative number to stay negative, so on some computers, under some compilers, when you shift a signed value right and the high-order bit is 1, new 1 bits are shifted in at the left instead of 0s. However, you can't depend on this, because not all computers and compilers implement right shift this way. In any case, shifting negative numbers to the right (even if the high-order 1 bit propagates) gives you an incorrect answer if there's a remainder involved: in 2's complement, 16-bit arithmetic, -15 is 0xfff1, so -15 &gt;&gt; 1 might give you 0xfff8 shifted which is -8. But integer division is supposed to discard the remainder, so -15 / 2 would have given you -7. (If you're having trouble seeing the way the shift worked, 0xfff1 is 1111111111110001<sub>2</sub> and 0xfff8 is 1111111111111000<sub>2</sub>. The low-order 1 bit got shifted off to the right, but because the high-order bit was 1, a 1 got shifted in at the left.)
 
@@ -1730,7 +2176,7 @@ a string of ones!
 
 If you take the bitwise AND of the two values, you get 0:
 
-01000000 & 00111111 = 00000000
+01000000 &amp; 00111111 = 00000000
 
 On the other hand, if you don't have a power of two, you'll have at least one additional 1:
 
@@ -1739,7 +2185,7 @@ On the other hand, if you don't have a power of two, you'll have at least one ad
 When you subtract 1, you'll still have at least one "on" bit (with a value of 1) in the same position as before, so taking the bitwise AND of the two numbers will not result in a string of 0s:
 
 01000001 - 00000001 = 01000000
-01000000 & 01000001 = 01000000
+01000000 &amp; 01000001 = 01000000
 
 So to tell if an integer is a power of two:
 </pre>
@@ -1752,7 +2198,8 @@ function is_power(x){
 <h3>Math.round ~~ hack</h3>
 Math.round() has a function call overhead, so using the ~~ hack (truncate towards 0) and adding 0.5 works quicker, but if you want to handle negative numbers too then you have to check whether to add or subtract 0.5 .... and this wipes out the speed advantage. So ~~(0.5+num) is only worth it if you know your numbers always have the same sign...
 
-Here is the jsperf test of these methods. <a href="http://jsperf.com/math-round-vs-hack">http://jsperf.com/math-round-vs-hack</a>
+Here is the jsperf test of these methods.
+<a href="http://jsperf.com/math-round-vs-hack">http://jsperf.com/math-round-vs-hack</a>
 <a href="http://jsperf.com/bit-vs-comparison-operator">http://jsperf.com/bit-vs-comparison-operator</a>
 </pre>
 <pre class="brush:js">
@@ -1778,7 +2225,7 @@ rounded["Math.round(somenum)"] = Math.round(somenum);
 rounded["~~ (0.5 + somenum)"] = ~~ (0.5 + somenum);
 rounded["~~ (somenum + (somenum > 0 ? .5 : -.5))"] = ~~ (somenum + (somenum > 0 ? .5 : -.5));
 
-document.write(print_r(rounded, true).trim());
+printData('rounded', rounded);
 })();
 </script>
 </pre>
@@ -1787,36 +2234,76 @@ document.write(print_r(rounded, true).trim());
 <div class="row">
 <div class="span12">
 <h2>jQuery</h2>
+<pre>
+<h3>What is jQuery?</h3>
+jQuery is a fast and concise JavaScript Library created by John Resig in 2006 with a nice motto: Write less, do more. jQuery simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development.
+
+jQuery is a JavaScript toolkit designed to simplify various tasks by writing less code. Here is the list of important core features supported by jQuery:
+- DOM manipulation: The jQuery made it easy to select DOM elements, traverse them and modifying their content by using cross-browser open source selector engine called Sizzle.
+- Event handling: The jQuery offers an elegant way to capture a wide variety of events, such as a user clicking on a link, without the need to clutter the HTML code itself with event handlers.
+- AJAX Support: The jQuery helps you a lot to develop a responsive and feature-rich site using AJAX technology.
+- Animations: The jQuery comes with plenty of built-in animation effects which you can use in your websites.
+- Lightweight: The jQuery is very lightweight library - about 19KB in size ( Minified and gzipped ).
+- Cross Browser Support: The jQuery has cross-browser support, and works well in IE 6.0+, FF 2.0+, Safari 3.0+, Chrome and Opera 9.0+
+- Latest Technology: The jQuery supports CSS3 selectors and basic XPath syntax.
+</pre>
 <pre class="brush:js">
-// Typically how you will call a function using jQuery.
+// Typically how you will typically call a function using jQuery.
 $(document).ready(function(){});
 
-// Doing the following will not invoke myfunction as a method.
-$(document).ready(myobject.myfunction);
+// Doing the following will not invoke mymethod as a method but as a function.
+// Because the callback is inside jQuery the function is bound to the document hence $(document) and that's what this refers to. If it wasn't jQuery the method would bound to the global window object (context) which means the variable this would be window.
+$(document).ready(myobject.mymethod);
 
-// Don't do this because it defeats the purpose of using jQuery's ready method.
-$(document).ready(myobject.myfunction());
+// Don't do this because it defeats the purpose of using jQuery's ready method because mymethod is invoked before the document is ready.
+$(document).ready(myobject.mymethod());
 
 // Invoke methods from inside the anonymous function because they typically reference object variables using the variable this.
-$(document).ready(function(){myobject.myfunction()});
+$(document).ready(function(){myobject.mymethod()});
 
 // This can also be solved by defining a bind method like this:
 
 function bind(fnThis, fn){
 	var args = Array.prototype.slice.call(arguments, 2);
 	return function(){
-		if (0 < args.length) arguments = args;
+		if (0 &lt; args.length) arguments = args;
 		return fn.apply(fnThis, arguments);
 	};
 }
 
-$(document).ready(bind(myobject, myobject.myfunction));
+$(document).ready(bind(myobject, myobject.mymethod));
+
+// Sample Code Demonstrating This Behavior
+
+var scope = "Global Scope";
+var myobject = {
+	scope: "Local Scope",
+	mymethod: function(){
+		alert(this.scope);
+	}
+};
+
+// Undefined (there isn't a scope property in the document object)
+$(document).ready(myobject.mymethod);
+
+// Global Scope
+$(document).ready(myobject.mymethod.bind(window));
+$(document).ready($.proxy(myobject.mymethod, window));
+
+// Local Scope
+$(document).ready(function(){myobject.mymethod()});
+$(document).ready(myobject.mymethod.bind(myobject));
+$(document).ready(bind(myobject, myobject.mymethod));
+$(document).ready($.proxy(myobject, "mymethod"));
+$(document).ready($.proxy(myobject.mymethod, myobject));
 </pre>
 <pre>
 <h3>$.noConflict()</h3>
 When you put jQuery into no-conflict mode, you have the option of assigning a variable name to replace $.
 
 You can continue to use the standard $ by wrapping your code in a self-executing anonymous function; this is a standard pattern for plugin authoring, where the author cannot know whether another library will have taken over the $.
+
+However, the handler passed to the .ready() method can take an argument, which is passed the global jQuery object.
 </pre>
 <pre class="brush:js">
 var $j = jQuery.noConflict();
@@ -1826,6 +2313,12 @@ var $j = jQuery.noConflict();
 (function($){
 	// your code here, using the $
 })(jQuery);
+
+// OR
+
+jQuery(document).ready(function($){
+	// code using $ as usual goes here.
+});
 </pre>
 <pre>
 Detach Elements to Work With Them
@@ -1844,26 +2337,37 @@ $parent.append(table);
 <b>Don't Act on Absent Elements</b>
 
 jQuery won't tell you if you're trying to run a whole lot of code on an empty selection - it will proceed as though nothing's wrong. It's up to you to verify that your selection contains some elements.
+
+You could make a plugin to use to ensure that the jQuery object is not empty.
 </pre>
 <pre class="brush:js">
 // BAD: this runs three functions
-// before it realizes there's nothing
+// before it realizes there&apos;s nothing
 // in the selection
-$('#nosuchthing').slideUp();
+$("#nosuchthing").slideUp();
 
 // Better
-var $mySelection = $('#nosuchthing');
+var $mySelection = $("#nosuchthing");
 if ($mySelection.length) { $mySelection.slideUp(); }
 
 // BEST: add a doOnce plugin
 jQuery.fn.doOnce = function(func){
 	this.length && func.apply(this);
 	return this;
-}
+};
 
-$('li.cartitems').doOnce(function(){
+$("li.cartitems").doOnce(function(){
 	// make it ajax! \o/
 });
+
+// OR
+
+$.fn.ensure = function(){
+	if (this.length === 0) throw "Empty jQuery result.";
+	return this;
+};
+
+$("ul.some-list").ensure().append(listItem);
 </pre>
 <pre>
 This guidance is especially applicable for jQuery UI widgets, which have a lot of overhead even when the selection doesn't contain elements.
@@ -1880,26 +2384,198 @@ Selector Performance:
 <div class="span12">
 <h2>Event Listeners</h2>
 <pre>
-Section Text
+<a href="https://developer.mozilla.org/en-US/docs/JavaScript/New_in_JavaScript/1.8.5">JavaScript 1.8.5</a> introduces the <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function/bind">Function.prototype.bind()</a> method, which lets you specify the value that should be used as this for all calls to a given function. This lets you easily bypass problems where it's unclear what this will be, depending on the context from which your function was called. Note, however, that you'll need to keep a reference to the listener around so you can later remove it.
+<h3>addEventListener</h3>
+addEventListener() registers a single event listener on a single target. The event target may be a single element in a document, the document itself, a window, or an XMLHttpRequest.
+
+To register more than one event listener for the target, call <a href="https://developer.mozilla.org/en-US/docs/DOM/EventTarget.addEventListener">addEventListener()</a> for the same target but with different event types, event listeners or capture parameters.
+
+<b>Syntax</b>
+
+target.addEventListener(type, listener[, useCapture]);
+
+<i>type</i>
+
+A string representing the event type to listen for.
+
+<i>listener</i>
+
+The object that receives a notification when an event of the specified type occurs. This must be an object implementing the EventListener interface, or simply a JavaScript function.
+
+<i>useCapture (optional)</i>
+
+If true, useCapture indicates that the user wishes to initiate capture. After initiating capture, all events of the specified type will be dispatched to the registered listener before being dispatched to any EventTarget beneath it in the DOM tree. Events which are bubbling upward through the tree will not trigger a listener designated to use capture. Note that this parameter is not optional in all browser versions. If not specified, useCapture is false.
 </pre>
 <pre class="brush:js">
 document.addEventListener("DOMContentLoaded", function(){
 	alert("Document Ready");
 });
 
+function DOMContentLoaded(){
+	alert("Document Ready");
+}
+
+document.addEventListener("DOMContentLoaded", DOMContentLoaded, false);
+document.removeEventListener("DOMContentLoaded", DOMContentLoaded, false);
+window.addEventListener("load", DOMContentLoaded, false);
+window.attachEvent("onload", DOMContentLoaded);
+document.attachEvent("onreadystatechange", DOMContentLoaded);
+document.detachEvent("onreadystatechange", DOMContentLoaded);
+</pre>
+<pre>
+<h3>readyState</h3>
+The readyState property returns the (loading) status of the current document.
+
+This property returns one of four values:
+- uninitialized: has not started loading yet
+- loading: loading
+- interactive: has loaded enough and the user can interact with it
+- complete: fully loaded
+
+document.onreadystatechange is typically more optimal than window.onload as it fires before all external resources such as images are loaded.
+
+document.readystate is a property and document.onload is an event.
+</pre>
+<pre class="brush:js">
 // alternative to DOMContentLoaded
 document.onreadystatechange = function(){
 	if (document.readyState == "interactive") {
 		initApplication();
 	}
-}
+};
 
 // alternative to load event
 document.onreadystatechange = function(){
 	if (document.readyState == "complete") {
 		initApplication();
 	}
+};
+</pre>
+<pre>
+<h3>The value of this within the handler</h3>
+It is often desirable to reference the element from which the event handler was fired, such as when using a generic handler for a series of similar elements. When attaching a function using addEventListener() the value of this is changed—note that the value of this is passed to a function from the caller.
+<pre class="brush:js">
+var el = document.getElementById("t");
+el.addEventListener("click", function(){ modifyText(); }, false);
+</pre>
+In the example above, the value of this within modifyText() when called from the click event is a reference to the table 't'. This is in contrast to the behavior that occurs if the handler is added in the HTML source:
+
+&lt;table id="t" onclick="modifyText();"&gt;
+
+The value of <a href="http://www.quirksmode.org/js/this.html">this</a> within modifyText() when called from the onclick event will be a reference to the global (window) object.
+
+Using a special function called handleEvent to catch any events:
+<pre class="brush:js">
+var Something = function(element){
+	this.name = 'Something Good';
+	this.handleEvent = function(event){
+		console.log(this.name); // 'Something Good', as this is the Something object
+		switch (event.type) {
+			case 'click':
+				// some code here...
+			break;
+			case 'dblclick':
+				// some code here...
+			break;
+		}
+	};
+
+	// Note that the listeners in this case are this, not this.handleEvent
+	element.addEventListener('click', this, false);
+	element.addEventListener('dblclick', this, false);
+
+	// You can properly remove the listners
+	element.removeEventListener('click', this, false);
+	element.removeEventListener('dblclick', this, false);
+};
+</pre>
+<h3>Legacy Internet Explorer and attachEvent</h3>
+In Internet Explorer versions prior to IE 9, you have to use attachEvent rather than the standard addEventListener. There is a drawback to attachEvent, the value of this will be a reference to the window object instead of the element on which it was fired.
+</pre>
+<pre class="brush:js">
+if (el.addEventListener) {
+	el.addEventListener('click', modifyText, false);
+} else if (el.attachEvent) {
+	el.attachEvent('onclick', modifyText);
 }
+</pre>
+<pre>
+<h3>Old way to add event handlers</h3>
+addEventListener() was introduced with the DOM 2 Events specification. Before then, event listeners were registered as follows:
+</pre>
+<pre class="brush:js">
+// Pass a function reference — do not add '()' after it, which would call the function!
+el.onclick = modifyText;
+ 
+// Using a function expression
+el.onclick = function(){
+	alert("Element Clicked!");
+};
+</pre>
+<pre>
+This method replaces the existing click event listener(s) on the element if there are any. Similarly for other events and associated event handlers such as blur (onblur), keypress (onkeypress), and so on.
+
+Because it was essentially part of DOM 0, this method is very widely supported and requires no special cross–browser code; hence it is normally used to register event listeners dynamically unless the extra features of addEventListener() are needed.
+
+<h3>Memory Issues</h3>
+In the first case, a new (anonymous) function is created at each loop turn. In the second case, the same previously declared function is used as an event handler. This results in smaller memory consumption.
+
+Moreover, in the first case, since no reference to the anonymous functions is kept, it is not possible to call element.removeEventListener because we do not have a reference to the handler, while in the second case, it's possible to do myElement.removeEventListener("click", processEvent, false).
+</pre>
+<pre class="brush:js">
+var i, els = document.getElementsByTagName('*');
+ 
+// Case 1
+for (i = 0; i &lt; els.length; i++) {
+	els[i].addEventListener("click", function(e){ /* do something */ }, false);
+}
+ 
+// Case 2
+function processEvent(e){
+	/* do something */
+}
+ 
+for (i = 0; i &lt; els.length; i++) {
+	els[i].addEventListener("click", processEvent, false);
+}
+</pre>
+<pre>
+<h3>Document Ready</h3>
+Sample function to determine when the document has been loaded. Also sample script to calculate the time elapsed to load the document.
+
+<a href="https://github.com/dperini/ContentLoaded/blob/master/src/contentloaded.js">ContentLoaded</a>
+<a href="http://jsfiddle.net/gerst20051/Za8fr/">jQuery's Document Ready</a>
+</pre>
+<pre class="brush:js">
+function contentLoaded(win, fn){
+	var doc = win.document, done = false,
+		add = doc.addEventListener ? 'addEventListener' : 'attachEvent',
+		rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent',
+		pre = doc.addEventListener ? '' : 'on',
+		init = function(){
+			if (e.type == 'readystatechange' && doc.readyState != 'complete') return;
+			(e.type == 'load' ? win : doc)[rem](pre + e.type, init, false);
+			if (!done && (done = true)) fn.call(win, e.type || e);
+		};
+	if (doc.readyState == 'complete') fn.call(win, 'lazy');
+	else {
+		doc[add](pre + 'DOMContentLoaded', init, false);
+		doc[add](pre + 'readystatechange', init, false);
+		win[add](pre + 'load', init, false);
+	}
+}
+
+var $tt = (new Date).getTime();
+function timeElapsed(t){ return ((new Date()).getTime() - t); }
+
+contentLoaded(window,
+	function(e){
+		window.status = window.defaultStatus =
+			' * ' + (e.type || e) + ' ' +
+			' - ' + (e.eventType ? e.eventType : 'native') +
+			' in ' + timeElapsed($tt) + ' ms.';
+	}
+);
 </pre>
 </div>
 </div>
@@ -1907,6 +2583,10 @@ document.onreadystatechange = function(){
 <div class="span12">
 <h2>CSS Style Manipulation</h2>
 <pre>
+First, rely on the cascade whenever possible. CSS has a natural system of fallbacks built right in. Browsers take into account the last value that they were able to understand (this is how the cascade was designed to work). This means that if you order different solutions to the same problem from least advanced to most advanced, browsers will naturally use the most advanced solution they are capable of understanding.
+
+Just like normal property fallbacks, vendor prefixes should be ordered from oldest version to newest so that each browser gets the best code it is capable of handling. If there is a standard syntax, you want to put that last so that as support for the standard increases, more and more browsers will use the best code. 
+
 Be aware that setAttribute will remove all other style properties that may already have been defined in the element's style object. If the some-element element above had an in-line style attribute of say style="font-size: 18px", that value would have been removed by the use of setAttribute.
 
 <a href="http://www.stubbornella.org/content/2012/05/02/cross-browser-debugging-css/">http://www.stubbornella.org/content/2012/05/02/cross-browser-debugging-css/</a>
@@ -1919,6 +2599,25 @@ Be aware that setAttribute will remove all other style properties that may alrea
 <pre>
 <a href="http://jsperf.com/childnodes-vs-firstchild">http://jsperf.com/childnodes-vs-firstchild</a>
 <a href="http://jsperf.com/document-vs-getelementsbytagname">http://jsperf.com/document-vs-getelementsbytagname</a>
+<h3>Modify Node Values</h3>
+
+</pre>
+<pre class="brush:js">
+function modifyText(){
+	var t1 = document.getElementById("t1");
+	if (t1.firstChild.nodeValue == "three") {
+		t1.firstChild.nodeValue = "two";
+	} else {
+		t1.firstChild.nodeValue = "three";
+	}
+}
+
+// OR
+
+function modifyText2(text){
+	var t1 = document.getElementById("t2");
+	t1.firstChild.nodeValue = text;    
+}
 </pre>
 <pre class="brush:js">
 var pclass = document.querySelector("p.class");
@@ -2223,13 +2922,24 @@ HTML:
 &lt;param name="title" value="My Video"/&gt;
 &lt;/object&gt;
 </pre>
+<pre>
+<h3>Common CSS Tweaks in IE</h3>
+- Needing to add hasLayout with zoom:1
+- Position relative causing things to disappear
+- 3px float bug
+- Expanding container float bug (useful!) and overflow hidden which unfortunately "fixes" this useful bug.
+</pre>
+<pre>
+Undeclared assignment throws in IE, when identifier corresponds to element name/id. <a href="http://jsfiddle.net/gerst20051/cgAds/">jsFiddle</a>
+</pre>
 </div>
 </div>
 <div class="row">
 <div class="span12">
 <h2>So, you think you know JavaScript?</h2>
 <pre>
-Question 1: What value gets alerted?
+<h3>1. Scope</h3>
+What value gets alerted?
 </pre>
 <pre class="brush:js">
 var foo = 1;
@@ -2242,7 +2952,8 @@ function bar(){
 bar();
 </pre>
 <pre>
-Question 2: What value gets alerted?
+<h3>2. Scope / Function Hoisting and Returning</h3>
+What value gets alerted?
 </pre>
 <pre class="brush:js">
 var a = 1;
@@ -2255,7 +2966,8 @@ b();
 alert(a);
 </pre>
 <pre>
-Question 3: What value gets alerted?
+<h3>3. Scope</h3>
+What value gets alerted?
 </pre>
 <pre class="brush:js">
 if (!("a" in window)) {
@@ -2264,7 +2976,8 @@ if (!("a" in window)) {
 alert(a);
 </pre>
 <pre>
-Question 4: What value gets alerted?
+<h3>4. Scope and Variable Initialization</h3>
+What value gets alerted?
 </pre>
 <pre class="brush:js">
 if (!("a" in window)) {
@@ -2273,7 +2986,8 @@ if (!("a" in window)) {
 alert(a);
 </pre>
 <pre>
-Question 5: What value gets alerted?
+<h3>5. Variable and Function Names</h3>
+What value gets alerted?
 </pre>
 <pre class="brush:js">
 var a = 1,
@@ -2283,7 +2997,8 @@ var a = 1,
 alert(a);
 </pre>
 <pre>
-Question 6: What value gets alerted?
+<h3>6. Variable Initialization</h3>
+What value gets alerted?
 </pre>
 <pre class="brush:js">
 function a(x){
@@ -2293,7 +3008,8 @@ var a;
 alert(a);
 </pre>
 <pre>
-Question 7: What value gets alerted?
+<h3>7. Modifying Arguments Variable</h3>
+What value gets alerted?
 </pre>
 <pre class="brush:js">
 function b(x, y, a){
@@ -2303,7 +3019,8 @@ function b(x, y, a){
 b(1, 2, 3);
 </pre>
 <pre>
-Question 8: What value gets alerted?
+<h3>8. Context Using Null</h3>
+What value gets alerted?
 </pre>
 <pre class="brush:js">
 function a(){
@@ -2312,7 +3029,8 @@ function a(){
 a.call(null);
 </pre>
 <pre>
-Question 9: What value do you get for baz, bar, and bim when accessed outside the function?
+<h3>9. Closure</h3>
+What value do you get for baz, bim, and bar when accessed outside the function?
 </pre>
 <pre class="brush:js">
 // a self-executing anonymous function
@@ -2323,18 +3041,13 @@ Question 9: What value do you get for baz, bar, and bim when accessed outside th
 	bar = function(){ alert(baz); };
 })();
 
-console.log(baz);  // baz is not defined outside of the function
-bar();  // bar is defined outside of the anonymous function
-        // because it wasn't declared with var; furthermore,
-        // because it was defined in the same scope as baz,
-        // it has access to baz even though other code
-        // outside of the function does not
-
-bim();  // bim is not defined outside of the anonymous function,
-        // so this will result in an error
+console.log(baz);
+bim();
+bar();
 </pre>
 <pre>
-Question 10: Will found evaluate to true or false?
+<h3>10. Primitive Objects</h3>
+Will found evaluate to true or false? If found is true "Found" will be alerted.
 </pre>
 <pre class="brush:js">
 var found = new Boolean(false);
@@ -2344,16 +3057,70 @@ if (found) {
 }
 </pre>
 <pre>
-Next Question:
+<h3>11. Hoisting Duplicates Behavior</h3>
+What values gets logged for (typeof f) and for (f())?
+</pre>
+<pre class="brush:js">
+console.log(typeof f);
+if (true) {
+	function f(){ return 1; }
+} else {
+	function f(){ return 2; }
+}
+console.log(f());
+</pre>
+<pre>
+<h3>12. Math.min / Math.max</h3>
+Does this expression evaluate to true or false?
+</pre>
+<pre class="brush:js">
+console.log(Math.min() &lt; Math.max());
+</pre>
+<pre>
+<h3>13. Hoisting / Multiple Function Statements</h3>
+What value does the first bar() return? What value does the second bar() return? What value does the last bar() return?
+</pre>
+<pre class="brush:js">
+function bar(){ return 1; }
+bar();
+if (true) {
+	// overwritting with function statement
+	function bar(){ return 2; }
+	bar();
+}
+function bar(){ return 3; }
+bar();
+</pre>
+<pre>
+<h3>#. Topic</h3>
+Question?
 </pre>
 <pre class="brush:js">
 
 </pre>
+</div>
+</div>
+<div class="row">
+<div class="span12">
+<h2>Quiz Answers</h2>
 <pre>
-Answers:
+<b>1. 10</b>
 
-1. 10
-2. 1
+The browser will alert 10. JavaScript isn't block scoped but function scoped. The var foo inside the conditional brackets causes foo to be undefined (a falsy value) which causes the conditional to evaluate to true; therefore, the value of foo is set to 10. As we already know, all functions and variables are hoisted to the top of it's scope, but aren't initialized as demonstrated in the following code.
+
+It looks like this.
+<pre class="brush:js">
+var foo = 1;
+function bar(){
+	var foo;
+	if (!foo) {
+		foo = 10;
+	}
+	alert(foo);
+}
+bar();
+</pre>
+<b>2. 1</b>
 
 Here, of course, the browser will alert "1". So what's going on here? While it might seem strange, dangerous, and confusing, this is actually a powerful and expressive feature of the language. I don't know if there is a standard name for this specific behavior, but I've come to like the term "hoisting".
 
@@ -2369,16 +3136,59 @@ a = 1;
 b();
 alert(a);
 </pre>
-3. undefined
-4. 4
-5. 1
-6. function ...
-7. 3
-8. window
-9. 
-10. true
+<b>3. undefined</b>
+
+<b>4. 1</b>
+
+<b>5. 1</b>
+
+<b>6. function a(x){ ... </b>
+
+"function a(x){
+	return x * 2;
+}"
+
+<b>7. 3</b>
+
+<b>8. window</b>
+
+<b>9. error, error, 1</b>
+
+baz // ReferenceError: baz is not defined
+bim // ReferenceError: bim is not defined
+bar // 1
+
+baz and bim are not defined outside of the function, so they will result in a ReferenceError.
+
+bar is defined outside of the anonymous function because it wasn't declared with var; furthermore, because it was defined in the same scope as baz, it has access to baz even though other code outside of the function does not.
+
+<b>10. true</b>
 
 Found is alerted. In this example, a Boolean object is given a value of false, yet console.log("Found") still executes. That's because an object is always coerced to true when placed in a conditional statement. It doesn't matter that the object represents false, only that it is an object, and therefore evaluates to true.
+
+<b>11. function, 2</b>
+
+<b>12. true</b>
+
+The start number (used in comparisons) for Math.min should be Infinity. All number that are lower than positive infinity should be the smallest from a list, if there are no smaller then Infinity is the smallest (the only option) in the list. And for Math.max it's the same; all numbers that are larger than negative infinity should be the biggest if there are no bigger.
+
+Math.min(5, 100) where 5 is smaller than positive infinity (Infinity) and 100 it will return 5.
+
+Calling Math.min and Math.max with an array parameter may won't work on every platform. You should do the following instead:
+<pre class="brush:js">
+Math.min.apply(null, [1, 2, 3, 4, 5]); // returns 1
+</pre>
+Where the first parameter is the scope argument. Because Math.min() and Math.max() are "static" functions, we do not give this scope argument a value.
+
+If no arguments are given, the result is Infinity for Math.min() and -Infinity for Math.max(). If any value is NaN, the result is NaN.
+<pre class="brush:js">
+Math.max([1, 2, 3, 4]); // NaN
+</pre>
+<b>13. 3, 3, 3</b>
+
+Before the code even reaches the if statement the value of the variable bar is already set to the the last bar function (due to function hoisting) which returns 3.
+
+<b>#. </b>
 </pre>
 </div>
 </div>
@@ -2394,6 +3204,28 @@ You can certainly assign undefined to it, but that won't delete the variable. On
 
 <h3>What does if (!foo) actually do?</h3>
 
+
+<h3>Why should you split script tag?</h3>
+The first occurrence of the character sequence "&lt;/" (end-tag open delimiter) is treated as terminating the end of the element's content.
+
+&lt;/script&gt; has to be broken up because otherwise it would end the enclosing &lt;script&gt;&lt;/script&gt; block too early. Really it should be split between the &lt; and the /, because a script block is supposed (according to <a href="http://www.w3.org/TR/html4/types.html#type-cdata">SGML</a>) to be terminated by any end-tag open (<a href="http://mathiasbynens.be/notes/etago">ETAGO</a>) sequence (i.e. &lt;/):
+<pre class="brush:js">
+document.write("&lt;script&gt;&lt;\/script&gt;");
+// OR
+document.write("&lt;scr"+"ipt&gt;&lt;/sc"+"ript&gt;");
+// OR
+document.write("\x3Cscript&gt;\x3C/script&gt;");
+</pre>
+Whenever you need to use &lt;/style&gt; inside a &lt;style&gt; element, or &lt;/script&gt; inside a &lt;script&gt; element, just escape these strings. In both CSS and JavaScript there are various ways of doing this, but using a backslash (\, also known as "reverse solidus character") is by far the simplest.
+
+Another method used to get around this is to dynamically create and insert a script tag.
+<pre class="brush:js">
+var script = document.createElement('script');
+script.src = 'http://ads.com/buyme?rand='+Math.random();
+
+// now append the script into HEAD, it will fetched and executed
+document.documentElement.firstChild.appendChild(script);
+</pre>
 </pre>
 </div>
 </div>
@@ -2410,6 +3242,9 @@ I also wrote a condensed version of Douglas Crockford's already very dense book 
 I'm working on a collection of various JavaScript pitfalls you should be aware of available <a href="http://jsfiddle.net/gerst20051/BfNa8/">here</a>.
 
 If you're interested in various JavaScript assertions check this <a href="http://jsfiddle.net/gerst20051/MGz6g/">jsfiddle</a> out.
+
+<h3>Tests / Experiments</h3>
+<a href="http://kangax.github.io/jstests/">http://kangax.github.io/jstests/</a>
 </pre>
 </div>
 </div>
@@ -2433,12 +3268,9 @@ Section Text
 SyntaxHighlighter.defaults['gutter']=false;
 SyntaxHighlighter.all();
 
-if (!String.prototype.trim) {
-	String.prototype.trim = function(){
-		return this.replace(/^\s+|\s+$/g,'');
-	};
-}
-
+/**
+ * Create Table of Contents by scanning for header tags.
+ */
 (function(){
 	var toc = "";
 	var level = 0;
@@ -2465,6 +3297,48 @@ if (!String.prototype.trim) {
 	}
 
 	document.getElementById("toc").innerHTML += toc;
+})();
+
+/**
+ * Set target of external links (not table of contents / navigation links) to _blank so that
+ * they open in new tab.
+ */
+(function(){
+	var anchors = document.getElementById('contents').getElementsByTagName('a'), i, l;
+	for (i = 0, l = anchors.length; i < l; i++){
+		if (!anchors[i].hasAttribute("target")) {
+			anchors[i].setAttribute('target', '_blank');
+		}
+	}
+})();
+
+var add_the_handlers = function(nodes){
+	var helper = function(i){
+		return function(e){
+			window.links[i];
+		};
+	};
+	var i;
+	for (i = 0; i < nodes.length; i++) {
+		nodes[i].addEventListener('click', helper(i), false);
+	}
+};
+
+/**
+ * Add click handlers to links on page that have callbacks and use the addLink function.
+ */
+(function(){
+	//add_the_handlers(document.getElementsByClassName('link'));
+})();
+
+/**
+ * Trim all pre tags. Log output adds extra newlines to the end.
+ */
+(function(){
+	var pre = document.getElementsByTagName('pre'), i, l;
+	for (i = 0, l = pre.length; i < l; i++) {
+		pre[i].innerHTML = pre[i].innerHTML.trim();
+	}
 })();
 
 (function(){
