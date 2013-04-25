@@ -1586,25 +1586,11 @@ if (found) {
 </pre>
 There are other confusing circumstances when you instantiate primitive wrappers on your own. It's recommended to avoid doing so unless you have figured out the special case where it makes sense. Most of the time, using primitive wrapper objects instead of primitives will only lead to errors.
 <h3>Summary</h3>
-While JavaScript has no formal concept of classes, it does have the concept of types. Each variable
-or piece of data has a specific type associated with it. That type can be a primitive or a reference.
-There are five primitive types: strings, numbers, booleans, null, and undefined. These represent
-simple values that are stored directly in the variable object for a given context. Primitive types can
-be identified using typeof with the exception of null, which must be compared directly against the
-special value null.
+While JavaScript has no formal concept of classes, it does have the concept of types. Each variable or piece of data has a specific type associated with it. That type can be a primitive or a reference. There are five primitive types: strings, numbers, booleans, null, and undefined. These represent simple values that are stored directly in the variable object for a given context. Primitive types can be identified using typeof with the exception of null, which must be compared directly against the special value null.
 
-Reference types are the closest thing to classes in JavaScript. Objects are said to be instances of
-reference types. You can create new objects by using the new operator or by using a reference literal.
-Properties and methods are primarily accessed using dot notation but can also be accessed using
-bracket notation. Functions are objects in JavaScript just like anything else, it can be identified by using the typeof operator. Other reference types should use instanceof with a constructor to
-determine the type of object.
+Reference types are the closest thing to classes in JavaScript. Objects are said to be instances of reference types. You can create new objects by using the new operator or by using a reference literal. Properties and methods are primarily accessed using dot notation but can also be accessed using bracket notation. Functions are objects in JavaScript just like anything else, it can be identified by using the typeof operator. Other reference types should use instanceof with a constructor to determine the type of object.
 
-In order to make primitives seem more like references, JavaScript has three primitive wrapper types:
-String, Number, and Boolean. These are used whenever you access a primitive value corresponding
-to one of these types. These objects are created behind-the-scenes so that you can access methods
-on primitives as if they were regular objects. However, those objects are only temporary and are
-destroyed as soon as statement is complete. While it's possible to create your own instances of
-primitive wrappers, it's not recommended because it can lead to confusing situations.
+In order to make primitives seem more like references, JavaScript has three primitive wrapper types: String, Number, and Boolean. These are used whenever you access a primitive value corresponding to one of these types. These objects are created behind-the-scenes so that you can access methods on primitives as if they were regular objects. However, those objects are only temporary and are destroyed as soon as statement is complete. While it's possible to create your own instances of primitive wrappers, it's not recommended because it can lead to confusing situations.
 </pre>
 </div>
 </div>
@@ -3245,6 +3231,61 @@ If you're interested in various JavaScript assertions check this <a href="http:/
 
 <h3>Tests / Experiments</h3>
 <a href="http://kangax.github.io/jstests/">http://kangax.github.io/jstests/</a>
+
+<h3>Recommended YouTube Videos</h3>
+<a href="http://www.youtube.com/playlist?list=PL7664379246A246CB">Crockford on JavaScript: YUI Theater (8 Video Playlist)</a>
+• <a href="">The Early Years</a>
+• <a href="">And Then There Was JavaScript</a>
+• <a href="">Function The Ultimate</a>
+• <a href="">The Metamorphosis of Ajax</a>
+• <a href="">The End of All Things</a>
+• <a href="">Loopage</a>
+• <a href="">ECMAScript 5: The New Parts</a>
+• <a href="">Programming Style & Your Brain</a>
+
+<a href="http://www.youtube.com/playlist?list=PL5586336C26BDB324">The JavaScript Trilogy by Douglas Crockford (3 Video Playlist)</a>
+• <a href="http://www.youtube.com/watch?v=v2ifWcnQs6M">Douglas Crockford: The JavaScript Programming Language</a>
+• In this 2007 presentation at Yahoo!, which is meant to be the beginning of a three-course sequence (followed by "Theory of the DOM" and then "Advanced JavaScript"), Douglas Crockford explores not only the language as it is today but also how the language came to be the way it is.
+• <a href="http://www.youtube.com/watch?v=Y2Y0U-2qJMs">Douglas Crockford: An Inconvenient API - The Theory of the DOM</a>
+• In an internal tech talk at Yahoo! in 2006, Douglas Crockford delves into the sordid history of the DOM: that "vast source of incompatibility, pain and misery" that frontend engineers love to hate.
+• <a href="http://www.youtube.com/watch?v=DwYPG6vreJg">Douglas Crockford: Advanced JavaScript</a>
+• In this presentation (the third of a three-part series) Douglas Crockford looks closely at code patterns from which JavaScript programmers can choose in authoring their applications. He compares familiar constructs like the Pseudoclassical Pattern with more unique patterns like the Parasitic Pattern that (he argues) run more "with the grain" of JavaScript.
+
+<a href="http://www.youtube.com/watch?v=seX7jYI96GE">Google I/O 2011: Learning to Love JavaScript</a>
+• Alex Russell. JavaScript remains one of the most popular and important programming languages in history. Web Developer and Chrome Engineer Alex Russell exposes the timeless strengths of the JavaScript language and why it is a vital part of the open web platform. Come hear what's next for the JavaScript standard and how to get the most out of the new features coming soon in V8 and Chrome.
+• Arrays are objects. Indexes get turned into strings and then referenced that way. Everything being an object also being a map.
+
+<a href="http://www.youtube.com/watch?v=hQVTIJBZook">JavaScript: The Good Parts</a>
+• Douglas Crockford. JavaScript is a language with more than its share of bad parts. It went from non-existence to global adoption in an alarmingly short period of time. It never had an interval in the lab when it could be tried out and polished. JavaScript has some extraordinarily good parts. In JavaScript there is a beautiful, highly expressive language that is buried under a steaming pile of good intentions and blunders. The best nature of JavaScript was so effectively hidden that for many years the prevailing opinion of JavaScript was that it was an unsightly, incompetent abomination. This session will expose the goodness in JavaScript, an outstanding dynamic programming language. Within the language is an elegant subset that is vastly superior to the language as a whole, being more reliable, readable and maintainable.
+
+<a href="http://www.youtube.com/watch?v=Trurfqh_6fQ">Javascript: Your New Overlord</a>
+• In this keynote presentation at JAXConf 2012, Douglas "The JavaScript Guy" Crockford asserts that JavaScript has become the most important programming language in the world.
+• "The first time I saw JavaScript in 1995 I thought this is the stupidest thing I've ever seen. I said that. And I was pretty confident that I was right. ... In looking deeply at it I discovered it's got lambdas in it! Suddenly all this potential opened up."
+
+<a href="http://www.youtube.com/watch?v=u4IdoBU1uKE">Dave Herman: The Future of JavaScript</a>
+• Dave Herman. Mozilla Labs engineer and TC39 representative Dave Herman joined us at YUIConf 2011 to give this keynote talk on the future of JavaScript, covering many of the new features currently under consideration for ES6, the next edition of the ECMAScript standard.
+
+<a href="http://www.youtube.com/watch?v=vXjVFPosQHw">Nicholas Zakas: Scalable JavaScript Application Architecture</a>
+• <a href="http://www.slideshare.net/nzakas/scalable-javascript-application-architecture">SlideShare</a>
+• Nicholas Zakas. Yahoo! home page engineer Nicholas Zakas, author of Professional JavaScript for Web Developers, discusses frontend architecture for complex, modular web applications with significant JavaScript elements.
+
+<a href="http://www.youtube.com/watch?v=Rj49rmc01Hs">Fluent 2012: Brendan Eich, "JavaScript at 17"</a>
+• Brendan Eich. Almost two decades after the birth of JavaScript, its creator gives a whirlwind history of the language with stories (and dirt!) dished out from each era. What worked well for JavaScript and what has continued to make developers groan? What's coming in ES6 and where next for the JavaScript community? Answers to these questions and more from as authoritative a source as it gets.
+
+<a href="http://www.youtube.com/watch?v=jo_B4LTHi3I">Introduction to Node.js with Ryan Dahl</a>
+• Node.js is a system for building network services for Google's V8 JavaScript engine. In this presentation Ryan Dahl, the man behind Node.js will introduce you to this event-driven I/O framework with a few examples showing Node.js in action. Ryan will also talk about the recent release of v0.4.0 and how to use some of the new APIs.
+
+<a href="http://www.youtube.com/watch?v=F6k8lTrAE2g">Node.js: JavaScript on the Server</a>
+• Ryan Dahl. Presented by Ryan Dahl, the creator of the node.JS open source project.
+• It is well known that event loops rather than threads are required for high-performance servers. Javascript is a language unencumbered of threads and designed specifically to be used with synchronous evented I/O, making it an attractive means of programming server software.
+• Node.js ties together the V8 Javascript compiler with an event loop, a thread pool for making blocking system calls, and a carefully designed HTTP parser to provide a browser-like interface to creating fast server-side software. This talk will explain Node's design and how to get started with it.
+
+<a href="http://www.youtube.com/watch?v=_l96hPlqzcI">Hands on with Node.js / Beginner Guide / Getting Started</a>
+• Node.js is an exciting new platform for building web applications in JavaScript. With its unique I/O model, it excels at the sort of scalable and real-time situations we are increasingly demanding of our servers. The ability to use JavaScript for both the client and server opens up many possibilities for code sharing, expertise reuse, and rapid development. The class is intended for anyone looking to explore the capabilities of the Node.js development platform.
+• At the end of the class, students will have gained a grasp on node's ecosystem and paradigms, be able to write node modules that they can publish and share, and will have experimented with writing realtime web applications.
+
+<a href="">Next Video</a>
+• Description
 </pre>
 </div>
 </div>
