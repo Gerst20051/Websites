@@ -9,7 +9,7 @@
 		f = "getElementsByTagName",
 		g = $w.navigator.userAgent,
 		h = g.indexOf("Firefox") !== -1 || g.indexOf("Opera") !== -1 ? true : false,
-		i = ["http://twitter.github.com/bootstrap/assets/css/bootstrap.css", "http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"],
+		i = ["http://getbootstrap.com/2.3.2/assets/css/bootstrap.css", "http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"],
 		j = ["http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js", "http://alexgorbatchev.com/pub/sh/current/scripts/shAutoloader.js", "http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushXml.js", "http://agorbatchev.typepad.com/pub/sh/3_0_83/scripts/shBrushJScript.js", "https://rawgithub.com/kvz/phpjs/master/functions/strings/echo.js", "https://rawgithub.com/kvz/phpjs/master/functions/var/print_r.js"],
 		l = 0,
 		n,
